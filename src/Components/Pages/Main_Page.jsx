@@ -5,6 +5,7 @@ import { formatDate, getWeekNumber, schedule } from "../../data"; // Подкл�
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 
 const Main_Page = ({ currentUser }) => {
     // Получаем текущую дату и время
@@ -33,156 +34,190 @@ const Main_Page = ({ currentUser }) => {
         { time: '21:00 - 21:30' },
     ];
 
+    const findNextPairNumber = (groupSchedule, currentPairNumber) => {
+        if (!groupSchedule || groupSchedule.length === 0) return null;
+
+        // Найти первую пару в расписании, номер которой больше текущего
+        for (let i = 0; i < groupSchedule.length; i++) {
+            if (groupSchedule[i].pairNumber > currentPairNumber) {
+                return groupSchedule[i].pairNumber;
+            }
+        }
+
+        return null; // Если пар больше нет
+    };
+
+    const groupSchedule = schedule[currentUser.group]?.[currentDay];
+
     const currentPairNumber = pairsTime.findIndex(pair => currentTime >= pair.start && currentTime <= pair.end + 10) + 1;
-    const nextPairNumber = currentPairNumber + 1;
+    const nextPairNumber = findNextPairNumber(groupSchedule, currentPairNumber);
+
+    console.log(nextPairNumber)
 
     let currentPair
     let nextPair
 
-    const groupSchedule = schedule[currentUser.group]?.[currentDay];
 
     function getUserSchedule(users, schedule, currentDay, currentWeek, pairNumber) {
-        // Найти текущего пользователя
-        const user = users;
+        try {
+            // Найти текущего пользователя
+            const user = users;
 
-        if (!user) {
-            throw new Error("Пользователь не найден");
-        }
+            if (!user) {
+                throw new Error("Пользователь не найден");
+            }
 
-        // Получить группу пользователя
-        const userGroup = user.group;
-        const userSubgroup = user.subgroup;
+            // Получить группу пользователя
+            const userGroup = user.group;
+            const userSubgroup = user.subgroup;
 
-        // Проверить расписание для группы пользователя
-        const groupSchedule = schedule[userGroup];
-        if (!groupSchedule || !groupSchedule[currentDay]) {
-            throw new Error("Расписание для текущего дня не найдено");
-        }
+            // Проверить расписание для группы пользователя
+            const groupSchedule = schedule[userGroup];
+            if (!groupSchedule || !groupSchedule[currentDay]) {
+                throw new Error("Расписание для текущего дня не найдено");
+            }
 
-        // Найти расписание для указанной пары
-        const pairSchedule = groupSchedule[currentDay].find(
-            (pair) => pair.pairNumber === pairNumber
-        );
+            // Найти расписание для указанной пары
+            const pairSchedule = groupSchedule[currentDay].find(
+                (pair) => pair.pairNumber === pairNumber
+            );
 
-        if (!pairSchedule) {
-            throw new Error("Пара не найдена");
-        }
+            if (!pairSchedule) {
+                throw new Error("Пара не найдена");
+            }
 
-        // Извлечь информацию в зависимости от типа пары
-        const fields = pairSchedule.fields;
-        const type = pairSchedule.type;
-        let result;
+            // Извлечь информацию в зависимости от типа пары
+            const fields = pairSchedule.fields;
+            const type = pairSchedule.type;
+            let result;
 
-        switch (type) {
-            case "type1":
-                result = {
-                    subject: fields[`main_subject`],
-                    teacher: fields[`main_teacher`],
-                    room: fields[`main_room`],
-                    type: fields[`main_type`]
-                };
-                break;
-            case "type2":
-                result = fields[`subgroup${userSubgroup}_subject`] ? {
-                    subject: fields[`subgroup${userSubgroup}_subject`],
-                    teacher: fields[`subgroup${userSubgroup}_teacher`],
-                    room: fields[`subgroup${userSubgroup}_room`],
-                    type: fields[`subgroup${userSubgroup}_type`]
-                } : null;
-                break;
-            case "type3": // Числитель/знаменатель
-                if (fields[`${currentWeek}_subject`]) {
+            switch (type) {
+                case "type1":
                     result = {
-                        subject: fields[`${currentWeek}_subject`],
-                        teacher: fields[`${currentWeek}_teacher`],
-                        room: fields[`${currentWeek}_room`],
-                        type: fields[`${currentWeek}_type`]
+                        pairNumber: pairNumber,
+                        subject: fields[`main_subject`],
+                        teacher: fields[`main_teacher`],
+                        room: fields[`main_room`],
+                        type: fields[`main_type`]
                     };
-                } else if (fields[`subgroup${userSubgroup}_subject`]) {
-                    // Если пара общая для подгруппы
-                    result = {
+                    break;
+                case "type2":
+                    result = fields[`subgroup${userSubgroup}_subject`] ? {
+                        pairNumber: pairNumber,
                         subject: fields[`subgroup${userSubgroup}_subject`],
                         teacher: fields[`subgroup${userSubgroup}_teacher`],
                         room: fields[`subgroup${userSubgroup}_room`],
                         type: fields[`subgroup${userSubgroup}_type`]
-                    };
-                }
-                break;
-            case "type4": // Комбинация подгрупп и числителя/знаменателя
-                if (fields[`subgroup${userSubgroup}_${currentWeek}_subject`]) {
-                    result = {
+                    } : null;
+                    break;
+                case "type3": // Числитель/знаменатель
+                    if (fields[`${currentWeek}_subject`]) {
+                        result = {
+                            pairNumber: pairNumber,
+                            subject: fields[`${currentWeek}_subject`],
+                            teacher: fields[`${currentWeek}_teacher`],
+                            room: fields[`${currentWeek}_room`],
+                            type: fields[`${currentWeek}_type`]
+                        };
+                    } else if (fields[`subgroup${userSubgroup}_subject`]) {
+                        // Если пара общая для подгруппы
+                        result = {
+                            pairNumber: pairNumber,
+                            subject: fields[`subgroup${userSubgroup}_subject`],
+                            teacher: fields[`subgroup${userSubgroup}_teacher`],
+                            room: fields[`subgroup${userSubgroup}_room`],
+                            type: fields[`subgroup${userSubgroup}_type`]
+                        };
+                    }
+                    break;
+                case "type4": // Комбинация подгрупп и числителя/знаменателя
+                    if (fields[`subgroup${userSubgroup}_${currentWeek}_subject`]) {
+                        result = {
+                            pairNumber: pairNumber,
+                            subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
+                            teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
+                            room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
+                            type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
+                        };
+                    } else if (fields[`subgroup${userSubgroup}_subject`]) {
+                        // Если пара общая для подгруппы
+                        result = {
+                            pairNumber: pairNumber,
+                            subject: fields[`subgroup${userSubgroup}_subject`],
+                            teacher: fields[`subgroup${userSubgroup}_teacher`],
+                            room: fields[`subgroup${userSubgroup}_room`],
+                            type: fields[`subgroup${userSubgroup}_type`]
+                        };
+                    }
+                    break;
+                case "type5":
+                    result = fields[`subgroup${userSubgroup}_subject`] ? {
+                        pairNumber: pairNumber,
+                        subject: fields[`subgroup${userSubgroup}_subject`],
+                        teacher: fields[`subgroup${userSubgroup}_teacher`],
+                        room: fields[`subgroup${userSubgroup}_room`],
+                        type: fields[`subgroup${userSubgroup}_type`]
+                    } : fields[`subgroup${userSubgroup}_${currentWeek}_subject`] ? {
+                        pairNumber: pairNumber,
                         subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
                         teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
                         room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
                         type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
-                    };
-                } else if (fields[`subgroup${userSubgroup}_subject`]) {
-                    // Если пара общая для подгруппы
-                    result = {
-                        subject: fields[`subgroup${userSubgroup}_subject`],
-                        teacher: fields[`subgroup${userSubgroup}_teacher`],
-                        room: fields[`subgroup${userSubgroup}_room`],
-                        type: fields[`subgroup${userSubgroup}_type`]
-                    };
-                }
-                break;
-            case "type5":
-                result = fields[`subgroup${userSubgroup}_subject`] ? {
-                    subject: fields[`subgroup${userSubgroup}_subject`],
-                    teacher: fields[`subgroup${userSubgroup}_teacher`],
-                    room: fields[`subgroup${userSubgroup}_room`],
-                    type: fields[`subgroup${userSubgroup}_type`]
-                } : fields[`subgroup${userSubgroup}_${currentWeek}_subject`] ? {
-                    subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
-                    teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
-                    room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
-                    type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
-                } : null;
-                break;
-            case "type6":
-                result = fields[`subgroup${userSubgroup}_${currentWeek}_subject`] ? {
-                    subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
-                    teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
-                    room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
-                    type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
-                } : fields[`${currentWeek}_subject`] ? {
-                    subject: fields[`${currentWeek}_subject`],
-                    teacher: fields[`${currentWeek}_teacher`],
-                    room: fields[`${currentWeek}_room`],
-                    type: fields[`${currentWeek}_type`]
-                } : null;
-                break;
-            case "type7":
-                result = fields[`${currentWeek}_subject`] ? {
-                    subject: fields[`${currentWeek}_subject`],
-                    teacher: fields[`${currentWeek}_teacher`],
-                    room: fields[`${currentWeek}_room`],
-                    type: fields[`${currentWeek}_type`]
-                } : fields[`subgroup${userSubgroup}_${currentWeek}_subject`] ? {
-                    subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
-                    teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
-                    room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
-                    type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
-                } : null;
-                break;
-            case "type8":
-                result = fields[`subgroup${userSubgroup}_${currentWeek}_subject`] ? {
-                    subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
-                    teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
-                    room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
-                    type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
-                } : fields[`subgroup${userSubgroup}_denominator_subject`] ? {
-                    subject: fields[`subgroup${userSubgroup}_denominator_subject`],
-                    teacher: fields[`subgroup${userSubgroup}_denominator_teacher`],
-                    room: fields[`subgroup${userSubgroup}_denominator_room`],
-                    type: fields[`subgroup${userSubgroup}_denominator_type`]
-                } : null;
-                break;
-            default:
-                throw new Error("Неизвестный тип пары");
-        }
+                    } : null;
+                    break;
+                case "type6":
+                    result = fields[`subgroup${userSubgroup}_${currentWeek}_subject`] ? {
+                        pairNumber: pairNumber,
+                        subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
+                        teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
+                        room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
+                        type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
+                    } : fields[`${currentWeek}_subject`] ? {
+                        pairNumber: pairNumber,
+                        subject: fields[`${currentWeek}_subject`],
+                        teacher: fields[`${currentWeek}_teacher`],
+                        room: fields[`${currentWeek}_room`],
+                        type: fields[`${currentWeek}_type`]
+                    } : null;
+                    break;
+                case "type7":
+                    result = fields[`${currentWeek}_subject`] ? {
+                        pairNumber: pairNumber,
+                        subject: fields[`${currentWeek}_subject`],
+                        teacher: fields[`${currentWeek}_teacher`],
+                        room: fields[`${currentWeek}_room`],
+                        type: fields[`${currentWeek}_type`]
+                    } : fields[`subgroup${userSubgroup}_${currentWeek}_subject`] ? {
+                        pairNumber: pairNumber,
+                        subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
+                        teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
+                        room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
+                        type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
+                    } : null;
+                    break;
+                case "type8":
+                    result = fields[`subgroup${userSubgroup}_${currentWeek}_subject`] ? {
+                        pairNumber: pairNumber,
+                        subject: fields[`subgroup${userSubgroup}_${currentWeek}_subject`],
+                        teacher: fields[`subgroup${userSubgroup}_${currentWeek}_teacher`],
+                        room: fields[`subgroup${userSubgroup}_${currentWeek}_room`],
+                        type: fields[`subgroup${userSubgroup}_${currentWeek}_type`]
+                    } : fields[`subgroup${userSubgroup}_denominator_subject`] ? {
+                        pairNumber: pairNumber,
+                        subject: fields[`subgroup${userSubgroup}_denominator_subject`],
+                        teacher: fields[`subgroup${userSubgroup}_denominator_teacher`],
+                        room: fields[`subgroup${userSubgroup}_denominator_room`],
+                        type: fields[`subgroup${userSubgroup}_denominator_type`]
+                    } : null;
+                    break;
+                default:
+                    throw new Error("Неизвестный тип пары");
+            }
 
-        return result || "Нет занятия";
+            return result || "Нет занятия";
+        } catch {
+            return "Нет занятия";
+        }
     }
 
     if (groupSchedule) {
@@ -234,7 +269,7 @@ const Main_Page = ({ currentUser }) => {
                 <Typography variant="p" fontWeight="bold" sx={{ fontSize: "20px" }}>
                     Текущая пара
                 </Typography>
-                {currentPair ? (
+                {currentPair != 'Нет занятия' ? (
                     <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '25px' }}>
                         <CardContent
                             sx={{
@@ -260,6 +295,19 @@ const Main_Page = ({ currentUser }) => {
                             </Box>
 
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                <Typography
+                                    sx={{
+                                        fontSize: '13px',
+                                        color: '#2BB0C9',
+                                        fontWeight: '500',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                    }}
+                                >
+                                    <LocalLibraryOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    {currentPair.pairNumber} пара
+                                </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
@@ -309,7 +357,7 @@ const Main_Page = ({ currentUser }) => {
                 <Typography variant="p" fontWeight="bold" sx={{ fontSize: "20px" }}>
                     Следующая пара
                 </Typography>
-                {nextPair ? (
+                {nextPair != 'Нет занятия' ? (
                     <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '25px' }}>
                         <CardContent
                             sx={{
@@ -345,8 +393,21 @@ const Main_Page = ({ currentUser }) => {
                                         gap: '5px',
                                     }}
                                 >
+                                    <LocalLibraryOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    {nextPair.pairNumber} пара
+                                </Typography>
+                                <Typography
+                                    sx={{
+                                        fontSize: '13px',
+                                        color: '#2BB0C9',
+                                        fontWeight: '500',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                    }}
+                                >
                                     <AccessTimeIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
-                                    {pairsNumberShow[currentPairNumber].time}
+                                    {pairsNumberShow[nextPairNumber - 1].time}
                                 </Typography>
                                 <Typography
                                     sx={{

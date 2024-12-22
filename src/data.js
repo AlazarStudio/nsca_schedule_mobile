@@ -161,7 +161,7 @@ export const schedule = {
                     "subgroup1_denominator_teacher": "Васильев Дмитрий Сергеевич",
                     "subgroup1_denominator_room": "216",
                     "subgroup1_denominator_type": "Лабораторная работа",
-                    "subgroup2_denominator_subject": "Информатика",
+                    "subgroup2_denominator_subject": "Информатика123",
                     "subgroup2_denominator_teacher": "Алексеев Александр Александрович",
                     "subgroup2_denominator_room": "216",
                     "subgroup2_denominator_type": "Лабораторная работа"
