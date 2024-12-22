@@ -52,11 +52,8 @@ const Main_Page = ({ currentUser }) => {
     const currentPairNumber = pairsTime.findIndex(pair => currentTime >= pair.start && currentTime <= pair.end + 10) + 1;
     const nextPairNumber = findNextPairNumber(groupSchedule, currentPairNumber);
 
-    console.log(nextPairNumber)
-
     let currentPair
     let nextPair
-
 
     function getUserSchedule(users, schedule, currentDay, currentWeek, pairNumber) {
         try {
@@ -238,20 +235,20 @@ const Main_Page = ({ currentUser }) => {
                     display: "flex",
                     flexDirection: "column",
                     gap: "15px",
-                    mb: "30px",
+                    mb: "20px",
                 }}
             >
                 <Box>
-                    <Typography component="p" sx={{ fontSize: "13px" }}>
+                    <Typography component="p" sx={{ fontSize: "13px", fontWeight: '600' }}>
                         {formatDate()}
                     </Typography>
-                    <Typography component="p" sx={{ fontSize: "24px", fontWeight: "700", margin: "10px 0 5px 0" }}>
+                    <Typography component="p" sx={{ fontSize: "24px", fontWeight: "700", margin: "15px 0 5px 0" }}>
                         {currentUser.name || "Гость"}
                     </Typography>
 
                     <Typography component="p" sx={{ fontSize: "13px", fontWeight: "500", display: "flex" }}>
                         Неделя:{" "}
-                        <div style={{ color: "#2BB0C9", fontWeight: "600", paddingLeft: "5px" }}>{weekType == 'numerator' ? "ЧИслитель" : "Знаменатель"}</div>
+                        <div style={{ color: "#81212D", fontWeight: "600", paddingLeft: "5px" }}>{weekType == 'numerator' ? "ЧИслитель" : "Знаменатель"}</div>
                     </Typography>
                 </Box>
             </Container>
@@ -262,7 +259,7 @@ const Main_Page = ({ currentUser }) => {
                     display: "flex",
                     flexDirection: "column",
                     gap: "15px",
-                    height: "calc(100% - 158px)",
+                    height: "calc(100% - 154px)",
                     overflowY: "auto",
                 }}
             >
@@ -270,7 +267,7 @@ const Main_Page = ({ currentUser }) => {
                     Текущая пара
                 </Typography>
                 {currentPair != 'Нет занятия' ? (
-                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '25px' }}>
+                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '10px' }}>
                         <CardContent
                             sx={{
                                 display: 'flex',
@@ -298,53 +295,53 @@ const Main_Page = ({ currentUser }) => {
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
-                                        color: '#2BB0C9',
+                                        color: '#000000',
                                         fontWeight: '500',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
                                     }}
                                 >
-                                    <LocalLibraryOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <LocalLibraryOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
                                     {currentPair.pairNumber} пара
                                 </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
-                                        color: '#2BB0C9',
+                                        color: '#000000',
                                         fontWeight: '500',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
                                     }}
                                 >
-                                    <AccessTimeIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
                                     {pairsNumberShow[currentPairNumber - 1].time}
                                 </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
-                                        color: '#2BB0C9',
+                                        color: '#000000',
                                         fontWeight: '500',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
                                     }}
                                 >
-                                    <PersonOutlineOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <PersonOutlineOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
                                     {currentPair.teacher}
                                 </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
-                                        color: '#2BB0C9',
+                                        color: '#000000',
                                         fontWeight: '500',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
                                     }}
                                 >
-                                    <ErrorOutlineIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <ErrorOutlineIcon style={{ color: '#81212D', fontSize: 14 }} />
                                     {currentPair.room[0]} корпус, {currentPair.room} аудитория
                                 </Typography>
                             </Box>
@@ -358,7 +355,7 @@ const Main_Page = ({ currentUser }) => {
                     Следующая пара
                 </Typography>
                 {nextPair != 'Нет занятия' ? (
-                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '25px' }}>
+                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '10px' }}>
                         <CardContent
                             sx={{
                                 display: 'flex',
@@ -386,53 +383,53 @@ const Main_Page = ({ currentUser }) => {
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
-                                        color: '#2BB0C9',
+                                        color: '#000000',
                                         fontWeight: '500',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
                                     }}
                                 >
-                                    <LocalLibraryOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <LocalLibraryOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
                                     {nextPair.pairNumber} пара
                                 </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
-                                        color: '#2BB0C9',
+                                        color: '#000000',
                                         fontWeight: '500',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
                                     }}
                                 >
-                                    <AccessTimeIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
                                     {pairsNumberShow[nextPairNumber - 1].time}
                                 </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
-                                        color: '#2BB0C9',
+                                        color: '#000000',
                                         fontWeight: '500',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
                                     }}
                                 >
-                                    <PersonOutlineOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <PersonOutlineOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
                                     {nextPair.teacher}
                                 </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '13px',
-                                        color: '#2BB0C9',
+                                        color: '#000000',
                                         fontWeight: '500',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
                                     }}
                                 >
-                                    <ErrorOutlineIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <ErrorOutlineIcon style={{ color: '#81212D', fontSize: 14 }} />
                                     {nextPair.room[0]} корпус, {nextPair.room} аудитория
                                 </Typography>
                             </Box>
