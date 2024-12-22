@@ -4,7 +4,7 @@ import BottomNav from "./BottomNavigation";
 import { formatDate, getWeekNumber, schedule } from "../../data"; // Подключаем расписание
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import HailOutlinedIcon from '@mui/icons-material/HailOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 const Main_Page = ({ currentUser }) => {
     // Получаем текущую дату и время
@@ -227,7 +227,7 @@ const Main_Page = ({ currentUser }) => {
                     display: "flex",
                     flexDirection: "column",
                     gap: "15px",
-                    height: "calc(100% - 140px)",
+                    height: "calc(100% - 158px)",
                     overflowY: "auto",
                 }}
             >
@@ -235,7 +235,7 @@ const Main_Page = ({ currentUser }) => {
                     Текущая пара
                 </Typography>
                 {currentPair ? (
-                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '15px' }}>
+                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '25px' }}>
                         <CardContent
                             sx={{
                                 display: 'flex',
@@ -283,7 +283,7 @@ const Main_Page = ({ currentUser }) => {
                                         gap: '5px',
                                     }}
                                 >
-                                    <HailOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <PersonOutlineOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
                                     {currentPair.teacher}
                                 </Typography>
                                 <Typography
@@ -310,7 +310,7 @@ const Main_Page = ({ currentUser }) => {
                     Следующая пара
                 </Typography>
                 {nextPair ? (
-                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '15px' }}>
+                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '25px' }}>
                         <CardContent
                             sx={{
                                 display: 'flex',
@@ -358,7 +358,7 @@ const Main_Page = ({ currentUser }) => {
                                         gap: '5px',
                                     }}
                                 >
-                                    <HailOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
+                                    <PersonOutlineOutlinedIcon style={{ color: '#2BB0C9', fontSize: 14 }} />
                                     {nextPair.teacher}
                                 </Typography>
                                 <Typography
