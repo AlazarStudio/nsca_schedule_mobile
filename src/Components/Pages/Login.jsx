@@ -33,7 +33,7 @@ const Login = () => {
 
         Cookies.set("currentUser", JSON.stringify(user), { expires: 7 }); // Хранить 7 дней
 
-        navigate("/splash");
+        navigate("/main");
     };
 
     return (
@@ -121,6 +121,8 @@ const Login = () => {
             >
                 Войти
             </Button>
+
+
         </Container>
     );
 };

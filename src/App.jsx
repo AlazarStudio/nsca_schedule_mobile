@@ -14,10 +14,10 @@ function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const user = Cookies.get("currentUser")
+  const currentUser = user && JSON.parse(user);
 
   useEffect(() => {
-    const currentUser = Cookies.get("currentUser");
-
     if (currentUser) {
       setIsAuthorized(true);
       setTimeout(() => {
@@ -39,10 +39,10 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={isAuthorized ? <Main_Page /> : <Login />} />
-        <Route path="/main" element={<Main_Page />} />
-        <Route path="/schedule" element={<Schedule_Page />} />
-        <Route path="/profile" element={<Profile_Page />} />
+        <Route index element={isAuthorized ? <Main_Page currentUser={currentUser} /> : <Login />} />
+        <Route path="/main" element={<Main_Page currentUser={currentUser} />} />
+        <Route path="/schedule" element={<Schedule_Page currentUser={currentUser} />} />
+        <Route path="/profile" element={<Profile_Page currentUser={currentUser} />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Non_Found_Page />} />
       </Route>

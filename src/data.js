@@ -21,7 +21,7 @@ export const getWeekNumber = (date = new Date()) => {
     const startOfYear = new Date(date.getFullYear(), 0, 1);
     const diffInDays = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24));
     const weekNumber = Math.ceil((diffInDays + startOfYear.getDay() + 1) / 7);
-    return weekNumber % 2 === 0 ? 'Знаменатель' : 'Числитель';
+    return weekNumber % 2 === 0 ? 'denominator' : 'numerator';
 }
 
 // ----------------------------------------------------------------------------
@@ -178,6 +178,7 @@ export const users = [
         password: "password123",
         name: "Джатдоев Алим",
         group: "ПМ-131",
+        subgroup: '1',
         role: "student",
     },
     {
@@ -185,7 +186,8 @@ export const users = [
         username: "student2",
         password: "password456",
         name: "Чагарова Аминат",
-        group: "ПИЭ-222",
+        group: "ПМ-131",
+        subgroup: '2',
         role: "student",
     },
 ];
