@@ -162,7 +162,30 @@ export const schedule = {
                 }
             }
         ],
-        "tuesday": [],
+        "tuesday": [{
+            "pairNumber": 1,
+            "type": "type1",
+            "fields": {
+                "main_subject": "Математика",
+                "main_teacher": "Джатдоев Алим Сеит-Алиевич",
+                "main_room": "211",
+                "main_type": "Лекционное занятие"
+            }
+        },
+        {
+            "pairNumber": 2,
+            "type": "type2",
+            "fields": {
+                "subgroup1_subject": "Математика",
+                "subgroup1_teacher": "Васильев Дмитрий Сергеевич",
+                "subgroup1_room": "247",
+                "subgroup1_type": "Лекционное занятие",
+                "subgroup2_subject": "Математика",
+                "subgroup2_teacher": "Алексеев Александр Александрович",
+                "subgroup2_room": "247",
+                "subgroup2_type": "Лекционное занятие"
+            }
+        },],
         "wednesday": [],
         "thursday": [],
         "friday": [],

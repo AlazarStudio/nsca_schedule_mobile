@@ -15,19 +15,26 @@ const Main_Page = ({ currentUser }) => {
 
     const pairsTime = [
         { start: 9 * 60, end: 10 * 60 + 30, type: "lesson", pairNumber: 1 },   // 1 пара
-        { start: 10 * 60 + 30, end: 10 * 60 + 40, type: "break" },             // Перемена
+        { start: 10 * 60 + 31, end: 10 * 60 + 39, type: "break" },             // Перемена
+
         { start: 10 * 60 + 40, end: 12 * 60 + 10, type: "lesson", pairNumber: 2 }, // 2 пара
-        { start: 12 * 60 + 10, end: 12 * 60 + 40, type: "break" },             // Перемена
+        { start: 12 * 60 + 11, end: 12 * 60 + 39, type: "break" },             // Перемена
+
         { start: 12 * 60 + 40, end: 14 * 60 + 10, type: "lesson", pairNumber: 3 }, // 3 пара
-        { start: 14 * 60 + 10, end: 14 * 60 + 20, type: "break" },             // Перемена
+        { start: 14 * 60 + 11, end: 14 * 60 + 19, type: "break" },             // Перемена
+
         { start: 14 * 60 + 20, end: 15 * 60 + 50, type: "lesson", pairNumber: 4 }, // 4 пара
-        { start: 15 * 60 + 50, end: 16 * 60, type: "break" },                  // Перемена
+        { start: 15 * 60 + 51, end: 15 * 60 + 59, type: "break" },                  // Перемена
+
         { start: 16 * 60, end: 17 * 60 + 30, type: "lesson", pairNumber: 5 },  // 5 пара
-        { start: 17 * 60 + 30, end: 17 * 60 + 40, type: "break" },             // Перемена
+        { start: 17 * 60 + 31, end: 17 * 60 + 39, type: "break" },             // Перемена
+
         { start: 17 * 60 + 40, end: 19 * 60 + 10, type: "lesson", pairNumber: 6 }, // 6 пара
-        { start: 19 * 60 + 10, end: 19 * 60 + 20, type: "break" },             // Перемена
+        { start: 19 * 60 + 11, end: 19 * 60 + 19, type: "break" },             // Перемена
+
         { start: 19 * 60 + 20, end: 20 * 60 + 50, type: "lesson", pairNumber: 7 }, // 7 пара
-        { start: 20 * 60 + 50, end: 21 * 60, type: "break" },             // Перемена
+        { start: 20 * 60 + 51, end: 20 * 60 + 59, type: "break" },             // Перемена
+
         { start: 21 * 60, end: 22 * 60 + 30, type: "lesson", pairNumber: 8 }, // 8 пара
     ];
 
@@ -338,7 +345,7 @@ const Main_Page = ({ currentUser }) => {
                                     }}
                                 >
                                     <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                    {pairsNumberShow[currentInterval.pairNumber - 1].time}
+                                    {pairsNumberShow[currentInterval.pairNumber - 1]?.time}
                                 </Typography>
                                 <Typography
                                     sx={{
@@ -364,7 +371,7 @@ const Main_Page = ({ currentUser }) => {
                                     }}
                                 >
                                     <ErrorOutlineIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                    {currentPair.room[0]} корпус, {currentPair.room} аудитория
+                                    {currentPair.room?.[0]} корпус, {currentPair.room} аудитория
                                 </Typography>
                             </Box>
                         </CardContent>
@@ -426,7 +433,7 @@ const Main_Page = ({ currentUser }) => {
                                     }}
                                 >
                                     <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                    {pairsNumberShow[currentInterval.pairNumber].time}
+                                    {pairsNumberShow[currentInterval.pairNumber]?.time}
                                 </Typography>
                                 <Typography
                                     sx={{
@@ -452,7 +459,7 @@ const Main_Page = ({ currentUser }) => {
                                     }}
                                 >
                                     <ErrorOutlineIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                    {nextPair.room[0]} корпус, {nextPair.room} аудитория
+                                    {nextPair.room?.[0]} корпус, {nextPair.room} аудитория
                                 </Typography>
                             </Box>
                         </CardContent>
