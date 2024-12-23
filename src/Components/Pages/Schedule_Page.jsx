@@ -5,7 +5,7 @@ import { schedule, getWeekNumber } from "../../data";
 
 const Schedule_Page = ({ currentUser }) => {
     const weekDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-    const weekType = getWeekNumber(); // Тип недели (числитель или знаменатель)
+    const weekType = getWeekNumber();
 
     const getScheduleForDay = (daySchedule, userSubgroup, weekType) => {
         if (!daySchedule || daySchedule.length === 0) return [];
@@ -180,12 +180,9 @@ const Schedule_Page = ({ currentUser }) => {
     };
 
     return (
-        <Box sx={{ pb: 7 }}>
-            <Typography variant="h5" fontWeight="bold" sx={{ mt: 3, textAlign: "center" }}>
-                Расписание на неделю
-            </Typography>
+        <Box sx={{ backgroundColor: 'red' }}>
 
-            <Box sx={{ mt: 2 }}>{renderSchedule()}</Box>
+            {/* <Box sx={{ mt: 2 }}>{renderSchedule()}</Box> */}
 
             <BottomNav active={1} />
         </Box>

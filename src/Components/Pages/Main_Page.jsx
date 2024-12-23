@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Card, CardContent, Container, Button } from "@mui/material";
 import BottomNav from "./BottomNavigation";
 import { formatDate, getWeekNumber, schedule } from "../../data"; // Подключаем расписание
@@ -8,20 +8,25 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 
 const Main_Page = ({ currentUser }) => {
-    // Получаем текущую дату и время
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes(); // Время в минутах
     const currentDay = now.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase(); // День недели
     const weekType = getWeekNumber(); // Тип недели (числитель или знаменатель)
 
     const pairsTime = [
-        { start: 9 * 60, end: 10 * 60 + 30 },   // 1 пара
-        { start: 10 * 60 + 40, end: 12 * 60 + 10 }, // 2 пара
-        { start: 12 * 60 + 40, end: 14 * 60 + 10 }, // 3 пара
-        { start: 14 * 60 + 20, end: 15 * 60 + 50 }, // 4 пара
-        { start: 16 * 60, end: 17 * 60 + 30 }, // 5 пара
-        { start: 17 * 60 + 40, end: 19 * 60 + 10 }, // 6 пара
+        { start: 9 * 60, end: 10 * 60 + 30, type: "lesson", pairNumber: 1 },   // 1 пара
+        { start: 10 * 60 + 30, end: 10 * 60 + 40, type: "break" },             // Перемена
+        { start: 10 * 60 + 40, end: 12 * 60 + 10, type: "lesson", pairNumber: 2 }, // 2 пара
+        { start: 12 * 60 + 10, end: 12 * 60 + 40, type: "break" },             // Перемена
+        { start: 12 * 60 + 40, end: 14 * 60 + 10, type: "lesson", pairNumber: 3 }, // 3 пара
+        { start: 14 * 60 + 10, end: 14 * 60 + 20, type: "break" },             // Перемена
+        { start: 14 * 60 + 20, end: 15 * 60 + 50, type: "lesson", pairNumber: 4 }, // 4 пара
+        { start: 15 * 60 + 50, end: 16 * 60, type: "break" },                  // Перемена
+        { start: 16 * 60, end: 17 * 60 + 30, type: "lesson", pairNumber: 5 },  // 5 пара
+        { start: 17 * 60 + 30, end: 17 * 60 + 40, type: "break" },             // Перемена
+        { start: 17 * 60 + 40, end: 19 * 60 + 10, type: "lesson", pairNumber: 6 }, // 6 пара
     ];
+
 
     const pairsNumberShow = [
         { time: '9:00 - 10:30' },
@@ -33,27 +38,6 @@ const Main_Page = ({ currentUser }) => {
         { time: '19:20 - 20:50' },
         { time: '21:00 - 21:30' },
     ];
-
-    const findNextPairNumber = (groupSchedule, currentPairNumber) => {
-        if (!groupSchedule || groupSchedule.length === 0) return null;
-
-        // Найти первую пару в расписании, номер которой больше текущего
-        for (let i = 0; i < groupSchedule.length; i++) {
-            if (groupSchedule[i].pairNumber > currentPairNumber) {
-                return groupSchedule[i].pairNumber;
-            }
-        }
-
-        return null; // Если пар больше нет
-    };
-
-    const groupSchedule = schedule[currentUser.group]?.[currentDay];
-
-    const currentPairNumber = pairsTime.findIndex(pair => currentTime >= pair.start && currentTime <= pair.end + 10) + 1;
-    const nextPairNumber = findNextPairNumber(groupSchedule, currentPairNumber);
-
-    let currentPair
-    let nextPair
 
     function getUserSchedule(users, schedule, currentDay, currentWeek, pairNumber) {
         try {
@@ -217,9 +201,44 @@ const Main_Page = ({ currentUser }) => {
         }
     }
 
-    if (groupSchedule) {
-        currentPair = getUserSchedule(currentUser, schedule, currentDay, weekType, currentPairNumber);
-        nextPair = getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber);
+    const findNextPairNumber = (groupSchedule, currentPairNumber) => {
+        if (!groupSchedule || groupSchedule.length === 0) return null;
+
+        // Найти следующую пару в расписании, которая идёт после текущей
+        for (let i = 0; i < groupSchedule.length; i++) {
+            if (groupSchedule[i].pairNumber > currentPairNumber) {
+                return groupSchedule[i].pairNumber;
+            }
+        }
+
+        return null; // Если пар больше нет
+    };
+
+    // Обновляем основную логику определения следующей пары
+    const currentInterval = pairsTime.find(pair => currentTime >= pair.start && currentTime <= pair.end);
+
+    let currentPair, nextPair;
+
+    if (currentInterval?.type === "lesson") {
+        // Если сейчас идёт пара
+        currentPair = getUserSchedule(currentUser, schedule, currentDay, weekType, currentInterval.pairNumber);
+
+        // Определяем следующую пару
+        const groupSchedule = schedule[currentUser.group]?.[currentDay];
+        const nextPairNumber = findNextPairNumber(groupSchedule, currentInterval.pairNumber);
+        nextPair = nextPairNumber ? getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber) : "Нет занятия";
+    } else if (currentInterval?.type === "break") {
+        // Если сейчас перемена
+        const groupSchedule = schedule[currentUser.group]?.[currentDay];
+        const nextPairNumber = findNextPairNumber(groupSchedule, currentInterval.pairNumber || 0);
+        currentPair = "Перемена";
+        nextPair = nextPairNumber ? getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber) : "Нет занятия";
+    } else {
+        // Если нет текущего интервала
+        currentPair = "Нет занятия";
+        const groupSchedule = schedule[currentUser.group]?.[currentDay];
+        const nextPairNumber = findNextPairNumber(groupSchedule, 0); // Искать с первой пары
+        nextPair = nextPairNumber ? getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber) : "Нет занятия";
     }
 
     return (
@@ -247,8 +266,8 @@ const Main_Page = ({ currentUser }) => {
                     </Typography>
 
                     <Typography component="p" sx={{ fontSize: "13px", fontWeight: "500", display: "flex" }}>
-                        Неделя:{" "}
-                        <div style={{ color: "#81212D", fontWeight: "600", paddingLeft: "5px" }}>{weekType == 'numerator' ? "ЧИслитель" : "Знаменатель"}</div>
+                        Текущая неделя:{" "}
+                        <div style={{ color: "#81212D", fontWeight: "600", paddingLeft: "5px" }}>{weekType == 'numerator' ? "Числитель" : "Знаменатель"}</div>
                     </Typography>
                 </Box>
             </Container>
@@ -316,7 +335,7 @@ const Main_Page = ({ currentUser }) => {
                                     }}
                                 >
                                     <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                    {pairsNumberShow[currentPairNumber - 1].time}
+                                    {pairsNumberShow[currentInterval.pairNumber - 1].time}
                                 </Typography>
                                 <Typography
                                     sx={{
@@ -404,7 +423,7 @@ const Main_Page = ({ currentUser }) => {
                                     }}
                                 >
                                     <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                    {pairsNumberShow[nextPairNumber - 1].time}
+                                    {pairsNumberShow[currentInterval.pairNumber].time}
                                 </Typography>
                                 <Typography
                                     sx={{
