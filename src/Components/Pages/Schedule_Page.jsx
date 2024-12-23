@@ -11,7 +11,8 @@ const Schedule_Page = ({ currentUser }) => {
     const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
     const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
     const weekType = getWeekNumber();
-    const [selectedDay, setSelectedDay] = useState(0); // Выбранный день недели
+    const currentDay = (new Date().getDay() + 6) % 7;
+    const [selectedDay, setSelectedDay] = useState(currentDay);
 
     const handleChange = (event, newValue) => {
         setSelectedDay(newValue);
