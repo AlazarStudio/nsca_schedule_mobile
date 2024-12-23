@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import PersonIcon from "@mui/icons-material/Person";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const BottomNav = ({ active }) => {
     const navigate = useNavigate();
@@ -57,7 +57,7 @@ const BottomNav = ({ active }) => {
                         fontSize: '12px',
                     },
                 }} />
-                <BottomNavigationAction label="Профиль" icon={<PersonIcon />} sx={{
+                <BottomNavigationAction label="Профиль" icon={<AccountCircleOutlinedIcon />} sx={{
                     '& .MuiBottomNavigationAction-label': {
                         fontSize: '12px',
                     },
