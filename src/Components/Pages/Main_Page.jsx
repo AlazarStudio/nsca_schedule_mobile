@@ -27,7 +27,6 @@ const Main_Page = ({ currentUser }) => {
         { start: 17 * 60 + 40, end: 19 * 60 + 10, type: "lesson", pairNumber: 6 }, // 6 пара
     ];
 
-
     const pairsNumberShow = [
         { time: '9:00 - 10:30' },
         { time: '10:40 - 12:10' },
@@ -278,7 +277,7 @@ const Main_Page = ({ currentUser }) => {
                     display: "flex",
                     flexDirection: "column",
                     gap: "15px",
-                    height: "calc(100% - 154px)",
+                    height: "calc(100vh - 173px)",
                     overflowY: "auto",
                 }}
             >
