@@ -28,13 +28,7 @@ export const getWeekNumber = (date = new Date()) => {
 
 export const schedule = {
     "ПМ-131": {
-        "monday": [],
-        "tuesday": [],
-        "wednesday": [],
-        "thursday": [],
-        "friday": [],
-        "saturday": [],
-        "sunday": [
+        "monday": [
             {
                 "pairNumber": 1,
                 "type": "type1",
@@ -167,7 +161,13 @@ export const schedule = {
                     "subgroup2_denominator_type": "Лабораторная работа"
                 }
             }
-        ]
+        ],
+        "tuesday": [],
+        "wednesday": [],
+        "thursday": [],
+        "friday": [],
+        "saturday": [],
+        "sunday": []
     }
 }
 
