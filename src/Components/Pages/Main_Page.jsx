@@ -25,6 +25,10 @@ const Main_Page = ({ currentUser }) => {
         { start: 16 * 60, end: 17 * 60 + 30, type: "lesson", pairNumber: 5 },  // 5 пара
         { start: 17 * 60 + 30, end: 17 * 60 + 40, type: "break" },             // Перемена
         { start: 17 * 60 + 40, end: 19 * 60 + 10, type: "lesson", pairNumber: 6 }, // 6 пара
+        { start: 19 * 60 + 10, end: 19 * 60 + 20, type: "break" },             // Перемена
+        { start: 19 * 60 + 20, end: 20 * 60 + 50, type: "lesson", pairNumber: 7 }, // 7 пара
+        { start: 20 * 60 + 50, end: 21 * 60, type: "break" },             // Перемена
+        { start: 21 * 60, end: 22 * 60 + 30, type: "lesson", pairNumber: 8 }, // 8 пара
     ];
 
     const pairsNumberShow = [
@@ -35,7 +39,7 @@ const Main_Page = ({ currentUser }) => {
         { time: '16:00 - 17:30' },
         { time: '17:40 - 19:10' },
         { time: '19:20 - 20:50' },
-        { time: '21:00 - 21:30' },
+        { time: '21:00 - 22:30' },
     ];
 
     function getUserSchedule(users, schedule, currentDay, currentWeek, pairNumber) {

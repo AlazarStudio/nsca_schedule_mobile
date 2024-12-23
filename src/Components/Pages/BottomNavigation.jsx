@@ -18,12 +18,12 @@ const BottomNav = ({ active }) => {
 
     return (
         <Paper
-            sx={{ position: "fixed", bottom: 0, left: 0, right: 0, borderTop: '1px solid #81212D', borderRadius: '0' }}
+            sx={{ position: "fixed", bottom: 0, left: 0, right: 0, borderRadius: '0' }}
         >
             <BottomNavigation value={value} onChange={handleChange} sx={{
                 '& .MuiBottomNavigationAction-root': {
                     color: '#999999',
-                    backgroundColor: '#F2F2F7'
+                    backgroundColor: '#ffffff'
                 },
                 '& .Mui-selected': {
                     color: '#81212D !important',
