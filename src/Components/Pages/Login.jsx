@@ -14,12 +14,16 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-const Login = () => {
+const Login = ({ currentUser }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+
+    if (currentUser) {
+        navigate("/main");
+    }
 
     const handleLogin = () => {
         const user = users.find(

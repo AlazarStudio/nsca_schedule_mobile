@@ -29,6 +29,7 @@ function App() {
     } else {
       setIsAuthorized(false);
       setLoading(false);
+      navigate("/login");
     }
   }, [navigate]);
 
@@ -43,7 +44,7 @@ function App() {
         <Route path="/main" element={<Main_Page currentUser={currentUser} />} />
         <Route path="/schedule" element={<Schedule_Page currentUser={currentUser} />} />
         <Route path="/profile" element={<Profile_Page currentUser={currentUser} />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login currentUser={currentUser} />} />
         <Route path="*" element={<Non_Found_Page />} />
       </Route>
     </Routes>

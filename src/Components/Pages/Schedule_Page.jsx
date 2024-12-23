@@ -195,11 +195,13 @@ const Schedule_Page = ({ currentUser }) => {
             <Box>
                 {schedule.length > 0 ? (
                     schedule.map((pair, index) => (
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            gap: '15px',
-                        }}>
+                        <Box
+                            key={index}
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                gap: '15px',
+                            }}>
                             <Box sx={{
                                 width: '50px',
                                 borderRight: '1px solid #848484',
