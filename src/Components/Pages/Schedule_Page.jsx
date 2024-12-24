@@ -43,16 +43,16 @@ const Schedule_Page = ({ currentUser }) => {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes(); // Время в минутах
 
-    const isPairDone = (currentTime, pairNumber, pairsTime) => {
-        if (currentTime > pairsTime[pairNumber].end) {
+    const isPairDone = (currentTime, pairNumber, pairsTime, day=currentDay) => {
+        if ((currentTime > pairsTime[pairNumber].end && day == selectedDay) || day > selectedDay) {
             return 'done'
         }
 
-        if (currentTime >= pairsTime[pairNumber].start && currentTime <= pairsTime[pairNumber].end) {
+        if (currentTime >= pairsTime[pairNumber].start && currentTime <= pairsTime[pairNumber].end && day == selectedDay) {
             return 'now'
         }
 
-        if (currentTime < pairsTime[pairNumber].start) {
+        if (currentTime < pairsTime[pairNumber].start || day != selectedDay) {
             return 'notStart'
         }
     }
