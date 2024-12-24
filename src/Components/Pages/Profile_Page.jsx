@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import BottomNav from "./BottomNavigation";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { formatDate, getWeekNumber } from "../../data";
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 const Profile_Page = ({ currentUser }) => {
     const navigate = useNavigate(); // Используем хук useNavigate
@@ -14,15 +15,26 @@ const Profile_Page = ({ currentUser }) => {
     };
 
     const weekType = getWeekNumber();
+
+    const [viewHeight, setViewHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const updateHeight = () => setViewHeight(window.innerHeight);
+        window.addEventListener("resize", updateHeight);
+        return () => window.removeEventListener("resize", updateHeight);
+    }, []);
     return (
         <Box
             sx={{
-                height: "100vh",
-                p: "15px",
+                height: `${viewHeight}px`,
+                p: "0px",
                 backgroundColor: "#f5f5f5",
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
             }}
         >
-            <Container sx={{ p: "0" }}>
+            <Container sx={{ p: "15px" }}>
                 <Typography
                     component="p"
                     sx={{
@@ -33,9 +45,12 @@ const Profile_Page = ({ currentUser }) => {
                 >
                     {formatDate()}
                 </Typography>
-                <Typography component="p" sx={{ fontSize: "24px", fontWeight: "700", margin: "15px 0 5px 0" }}>
+
+                <Typography component="p" sx={{ fontSize: "24px", fontWeight: "700", margin: "15px 0 5px 0", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     {currentUser.name || "Гость"}
+                    <LogoutOutlinedIcon onClick={handleLogout} />
                 </Typography>
+
                 <Typography component="p" sx={{ fontSize: "13px", fontWeight: "500", display: "flex" }}>
                     Текущая неделя:{" "}
                     <div style={{ color: "#81212D", fontWeight: "600", paddingLeft: "5px" }}>{weekType == 'numerator' ? "Числитель" : "Знаменатель"}</div>
@@ -44,9 +59,8 @@ const Profile_Page = ({ currentUser }) => {
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    height: 'calc(100vh - 183px)',
                     mt: '30px',
+                    gap: '30px'
                 }}>
                     <Box sx={{
                         display: 'flex',
@@ -77,41 +91,11 @@ const Profile_Page = ({ currentUser }) => {
                             <Box sx={{ fontSize: '15px', fontWeight: '500' }}>{currentUser.subgroup}</Box>
                         </Typography>
                     </Box>
-
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        fullWidth
-                        sx={{
-                            height: "50px",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            textTransform: "none",
-                            borderRadius: "8px",
-                            boxShadow: 'none',
-                            mb: '15px',
-                            backgroundColor: '#81212D',
-                            color: '#fff'
-                        }}
-                        onClick={handleLogout}
-                    >
-                        Выйти
-                    </Button>
-
                 </Box>
             </Container>
 
             <BottomNav active={2} />
         </Box>
-        // <Box sx={{ pb: 7 }}>
-        //     <Typography variant="h5" fontWeight="bold" sx={{ mt: 3, textAlign: "center" }}>
-        //         Профиль
-        //     </Typography>
-
-
-
-        //     <BottomNav active={2} />
-        // </Box>
     );
 };
 

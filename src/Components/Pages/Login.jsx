@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { users } from "../../data";
@@ -10,6 +10,7 @@ import {
     Container,
     InputAdornment,
     IconButton,
+    CircularProgress,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -19,6 +20,7 @@ const Login = ({ currentUser }) => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     if (currentUser) {
@@ -26,6 +28,13 @@ const Login = ({ currentUser }) => {
     }
 
     const handleLogin = () => {
+        // Убираем фокус с активного элемента (снимаем клавиатуру)
+        const activeElement = document.activeElement;
+        if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+            activeElement.blur();
+        }
+
+        // Проверяем пользователя
         const user = users.find(
             (u) => u.username === username && u.password === password
         );
@@ -35,10 +44,26 @@ const Login = ({ currentUser }) => {
             return;
         }
 
+        // Показать анимацию загрузки
+        setLoading(true);
+
+        // Сохраняем пользователя в куки
         Cookies.set("currentUser", JSON.stringify(user), { expires: 7 }); // Хранить 7 дней
 
-        navigate("/main");
+        // Задержка перед переходом
+        setTimeout(() => {
+            setLoading(false);
+            navigate("/main");
+        }, 1000);
     };
+
+    const [viewHeight, setViewHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const updateHeight = () => setViewHeight(window.innerHeight);
+        window.addEventListener("resize", updateHeight);
+        return () => window.removeEventListener("resize", updateHeight);
+    }, []);
 
     return (
         <Container
@@ -46,9 +71,9 @@ const Login = ({ currentUser }) => {
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                height: "100vh",
+                height: `${viewHeight}px`,
                 padding: "20px",
-                justifyContent: "space-between",
+                justifyContent: "center",
                 gap: 3,
             }}
         >
@@ -110,23 +135,27 @@ const Login = ({ currentUser }) => {
                 </Box>
             </Box>
 
-            <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{
-                    height: "50px",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    textTransform: "none",
-                    borderRadius: "8px",
-                }}
-                onClick={handleLogin}
-            >
-                Войти
-            </Button>
-
-
+            {loading ? (
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{
+                        height: "50px",
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        textTransform: "none",
+                        borderRadius: "8px",
+                    }}
+                    onClick={handleLogin}
+                >
+                    Войти
+                </Button>
+            )}
         </Container>
     );
 };

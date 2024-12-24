@@ -40,7 +40,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={isAuthorized ? <Main_Page currentUser={currentUser} /> : <Login />} />
+        <Route index element={isAuthorized ? <Main_Page currentUser={currentUser} /> : <Login currentUser={currentUser} />} />
         <Route path="/main" element={<Main_Page currentUser={currentUser} />} />
         <Route path="/schedule" element={<Schedule_Page currentUser={currentUser} />} />
         <Route path="/profile" element={<Profile_Page currentUser={currentUser} />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Container, Typography, Tab, Tabs, Chip, Card, CardContent } from "@mui/material";
 import BottomNav from "./BottomNavigation";
 import { schedule, getWeekNumber, formatDate } from "../../data";
@@ -43,7 +43,7 @@ const Schedule_Page = ({ currentUser }) => {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes(); // Время в минутах
 
-    const isPairDone = (currentTime, pairNumber, pairsTime, day=currentDay) => {
+    const isPairDone = (currentTime, pairNumber, pairsTime, day = currentDay) => {
         if ((currentTime > pairsTime[pairNumber].end && day == selectedDay) || day > selectedDay) {
             return 'done'
         }
@@ -188,7 +188,7 @@ const Schedule_Page = ({ currentUser }) => {
             key={day}
             sx={{
                 mt: 2,
-                height: 'calc(100vh - 246px)', // Контейнер занимает оставшееся место
+                height: 'calc(100% - 161px)',
                 overflowY: 'auto', // Скролл для длинного списка
             }}
         >
@@ -410,15 +410,27 @@ const Schedule_Page = ({ currentUser }) => {
         return renderDaySchedule(weekDays[selectedDay], userSchedule); // Передаём русский день и расписание
     };
 
+    const [viewHeight, setViewHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const updateHeight = () => setViewHeight(window.innerHeight);
+        window.addEventListener("resize", updateHeight);
+        return () => window.removeEventListener("resize", updateHeight);
+    }, []);
     return (
         <Box
             sx={{
-                height: "100vh",
-                p: "15px",
+                height: `${viewHeight}px`,
                 backgroundColor: "#f5f5f5",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: 'space-between'
             }}
         >
-            <Container sx={{ p: "0" }}>
+            <Container sx={{
+                p: "15px",
+                height: 'calc(100% - 60px)'
+            }}>
                 <Typography
                     component="p"
                     sx={{
@@ -429,9 +441,11 @@ const Schedule_Page = ({ currentUser }) => {
                 >
                     {formatDate()}
                 </Typography>
+
                 <Typography component="p" sx={{ fontSize: "24px", fontWeight: "700", margin: "15px 0 5px 0" }}>
                     {currentUser.name || "Гость"}
                 </Typography>
+
                 <Typography component="p" sx={{ fontSize: "13px", fontWeight: "500", display: "flex" }}>
                     Текущая неделя:{" "}
                     <div style={{ color: "#81212D", fontWeight: "600", paddingLeft: "5px" }}>{weekType == 'numerator' ? "Числитель" : "Знаменатель"}</div>
@@ -474,7 +488,6 @@ const Schedule_Page = ({ currentUser }) => {
                     ))}
                 </Tabs>
 
-                {/* Расписание для выбранного дня */}
                 {renderSchedule()}
             </Container>
 

@@ -1,10 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Box, Typography, Container } from "@mui/material";
 
 const SplashScreen = () => {
     const currentUser = JSON.parse(Cookies.get("currentUser") || "{}");
+
+    const [viewHeight, setViewHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const updateHeight = () => setViewHeight(window.innerHeight);
+        window.addEventListener("resize", updateHeight);
+        return () => window.removeEventListener("resize", updateHeight);
+    }, []);
 
     return (
         <Container
@@ -14,7 +22,7 @@ const SplashScreen = () => {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                height: "100vh",
+                height: `${viewHeight}px`,
             }}
         >
             <Box
