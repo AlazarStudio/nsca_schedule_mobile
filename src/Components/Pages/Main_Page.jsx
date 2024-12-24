@@ -240,7 +240,9 @@ const Main_Page = ({ currentUser }) => {
     } else if (currentInterval?.type === "break") {
         // Если сейчас перемена
         const groupSchedule = schedule[currentUser.group]?.[currentDay];
-        const nextPairNumber = findNextPairNumber(groupSchedule, currentInterval.pairNumber || 0);
+        const nextPairNumber = findNextPairNumber(groupSchedule, currentInterval.pairNumber);
+        console.log(currentInterval.pairNumber)
+
         currentPair = "Перемена";
         nextPair = nextPairNumber ? getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber) : "Нет занятия";
     } else {
@@ -309,93 +311,95 @@ const Main_Page = ({ currentUser }) => {
                         overflowY: "auto",
                     }}
                 >
-                    <Typography variant="p" fontWeight="bold" sx={{ fontSize: "20px" }}>
-                        Текущая пара
-                    </Typography>
-                    {currentPair != 'Нет занятия' ? (
-                        <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '10px' }}>
-                            <CardContent
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '25px',
-                                    p: '16px !important',
-                                }}
-                            >
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                    <Typography sx={{ fontSize: '17px', fontWeight: '700' }}>
-                                        {currentPair.subject}
-                                    </Typography>
-                                    <Typography
-                                        sx={{
-                                            fontSize: '13px',
-                                            fontWeight: '600',
-                                            color: '#00000060',
-                                        }}
-                                    >
-                                        {currentPair.type}
-                                    </Typography>
-                                </Box>
+                    {currentPair == 'Перемена' ? <Typography>Перемена</Typography> :
+                        currentPair == 'Нет занятия' ? (<Typography>В данный момент занятия нет</Typography>) :
+                            <>
+                                <Typography variant="p" fontWeight="bold" sx={{ fontSize: "20px" }}>
+                                    Текущая пара
+                                </Typography>
 
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                    <Typography
+                                <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '10px' }}>
+                                    <CardContent
                                         sx={{
-                                            fontSize: '13px',
-                                            color: '#000000',
-                                            fontWeight: '500',
                                             display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '5px',
+                                            flexDirection: 'column',
+                                            gap: '25px',
+                                            p: '16px !important',
                                         }}
                                     >
-                                        <LocalLibraryOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                        {currentPair.pairNumber} пара
-                                    </Typography>
-                                    <Typography
-                                        sx={{
-                                            fontSize: '13px',
-                                            color: '#000000',
-                                            fontWeight: '500',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '5px',
-                                        }}
-                                    >
-                                        <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                        {pairsNumberShow[currentInterval.pairNumber - 1]?.time}
-                                    </Typography>
-                                    <Typography
-                                        sx={{
-                                            fontSize: '13px',
-                                            color: '#000000',
-                                            fontWeight: '500',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '5px',
-                                        }}
-                                    >
-                                        <PersonOutlineOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                        {currentPair.teacher}
-                                    </Typography>
-                                    <Typography
-                                        sx={{
-                                            fontSize: '13px',
-                                            color: '#000000',
-                                            fontWeight: '500',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '5px',
-                                        }}
-                                    >
-                                        <ErrorOutlineIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                        {currentPair.room?.[0]} корпус, {currentPair.room} аудитория
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    ) : (
-                        <Typography>Нет текущей пары</Typography>
-                    )}
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                            <Typography sx={{ fontSize: '17px', fontWeight: '700' }}>
+                                                {currentPair.subject}
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: '13px',
+                                                    fontWeight: '600',
+                                                    color: '#00000060',
+                                                }}
+                                            >
+                                                {currentPair.type}
+                                            </Typography>
+                                        </Box>
+
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: '13px',
+                                                    color: '#000000',
+                                                    fontWeight: '500',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '5px',
+                                                }}
+                                            >
+                                                <LocalLibraryOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
+                                                {currentPair.pairNumber} пара
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: '13px',
+                                                    color: '#000000',
+                                                    fontWeight: '500',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '5px',
+                                                }}
+                                            >
+                                                <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
+                                                {pairsNumberShow[currentInterval.pairNumber - 1]?.time}
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: '13px',
+                                                    color: '#000000',
+                                                    fontWeight: '500',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '5px',
+                                                }}
+                                            >
+                                                <PersonOutlineOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
+                                                {currentPair.teacher}
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: '13px',
+                                                    color: '#000000',
+                                                    fontWeight: '500',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '5px',
+                                                }}
+                                            >
+                                                <ErrorOutlineIcon style={{ color: '#81212D', fontSize: 14 }} />
+                                                {currentPair.room?.[0]} корпус, {currentPair.room} аудитория
+                                            </Typography>
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+                            </>
+                    }
 
                     <Typography variant="p" fontWeight="bold" sx={{ fontSize: "20px" }}>
                         Следующая пара
