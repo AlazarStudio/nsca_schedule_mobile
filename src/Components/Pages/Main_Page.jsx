@@ -253,19 +253,10 @@ const Main_Page = ({ currentUser }) => {
         nextPair = nextPairNumber ? getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber) : "Нет занятия";
     }
 
-
-    const [viewHeight, setViewHeight] = useState(window.innerHeight);
-
-    useEffect(() => {
-        const updateHeight = () => setViewHeight(window.innerHeight);
-        window.addEventListener("resize", updateHeight);
-        return () => window.removeEventListener("resize", updateHeight);
-    }, []);
-
     return (
         <Box
             sx={{
-                height: `${viewHeight}px`,
+                height: `100dvh`,
                 p: "0px",
                 display: "flex",
                 flexDirection: "column",

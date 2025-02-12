@@ -57,21 +57,13 @@ const Login = ({ currentUser }) => {
         }, 1000);
     };
 
-    const [viewHeight, setViewHeight] = useState(window.innerHeight);
-
-    useEffect(() => {
-        const updateHeight = () => setViewHeight(window.innerHeight);
-        window.addEventListener("resize", updateHeight);
-        return () => window.removeEventListener("resize", updateHeight);
-    }, []);
-
     return (
         <Container
             maxWidth="xs"
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                height: `${viewHeight}px`,
+                height: `100dvh`,
                 padding: "20px",
                 justifyContent: "center",
                 gap: 3,

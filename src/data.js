@@ -276,8 +276,8 @@ export const schedule = {
 
 export const users = [{
     id: 1,
-    username: "student1",
-    password: "password123",
+    username: "qwe",
+    password: "qwe",
     name: "Джатдоев Алим",
     group: "ПМ-131",
     subgroup: '1',
@@ -285,8 +285,8 @@ export const users = [{
 },
 {
     id: 2,
-    username: "student2",
-    password: "password456",
+    username: "qwer",
+    password: "qwer",
     name: "Чагарова Аминат",
     group: "ПМ-131",
     subgroup: '2',

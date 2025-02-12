@@ -15,18 +15,10 @@ const Profile_Page = ({ currentUser }) => {
     };
 
     const weekType = getWeekNumber();
-
-    const [viewHeight, setViewHeight] = useState(window.innerHeight);
-
-    useEffect(() => {
-        const updateHeight = () => setViewHeight(window.innerHeight);
-        window.addEventListener("resize", updateHeight);
-        return () => window.removeEventListener("resize", updateHeight);
-    }, []);
     return (
         <Box
             sx={{
-                height: `${viewHeight}px`,
+                height: `100dvh`,
                 p: "0px",
                 backgroundColor: "#f5f5f5",
                 display: 'flex',
