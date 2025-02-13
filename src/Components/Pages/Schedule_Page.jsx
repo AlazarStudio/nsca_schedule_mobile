@@ -446,7 +446,7 @@ const Schedule_Page = ({ currentUser, schedule }) => {
 
 
 
-                {currentUser.subgroup != 'нет подгруппы' ?
+                {currentUser.subgroup != 'нет подгруппы' && currentUser.role != 'student' ?
                     <>
                         <Tabs
                             value={selectedDay}

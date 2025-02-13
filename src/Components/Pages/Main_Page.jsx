@@ -295,7 +295,7 @@ const Main_Page = ({ currentUser, schedule }) => {
                     </Box>
                 </Container>
 
-                {currentUser.subgroup != 'нет подгруппы' ?
+                {currentUser.subgroup != 'нет подгруппы' && currentUser.role != 'student' ?
                     <Container
                         sx={{
                             p: 0,
