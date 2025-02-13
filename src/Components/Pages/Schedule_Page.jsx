@@ -6,6 +6,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
+import MessageSubgroup from "./MessageSubgroup";
 
 const Schedule_Page = ({ currentUser, schedule }) => {
     const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
@@ -443,44 +444,52 @@ const Schedule_Page = ({ currentUser, schedule }) => {
                     <div style={{ color: "#81212D", fontWeight: "600", paddingLeft: "5px" }}>{weekType == 'numerator' ? "Числитель" : "Знаменатель"}</div>
                 </Typography>
 
-                <Tabs
-                    value={selectedDay}
-                    onChange={handleChange}
-                    variant="fullWidth"
-                    sx={{
-                        mt: '30px',
-                        mb: 2,
-                        overflow: 'auto',
-                        "& .MuiTabs-indicator": { display: "none" },
-                    }}
-                >
-                    {weekDays.map((day, index) => (
-                        <Tab
-                            key={index}
-                            label={day}
-                            sx={{
-                                minWidth: 0,
-                                textTransform: "none",
-                                fontWeight: "600",
-                                fontSize: "14px",
-                                padding: "6px",
-                                borderRadius: "8px",
-                                backgroundColor: "#fff",
-                                "&.Mui-selected": {
-                                    backgroundColor: "#81212D",
-                                    color: "#fff",
-                                },
-                                "&:not(.Mui-selected)": {
-                                    backgroundColor: "#fff",
-                                    color: "#000",
-                                },
-                                marginRight: day !== "Сб" ? "8px" : "0px",
-                            }}
-                        />
-                    ))}
-                </Tabs>
 
-                {renderSchedule()}
+
+                {currentUser.subgroup != 'нет подгруппы' ?
+                    <>
+                        <Tabs
+                            value={selectedDay}
+                            onChange={handleChange}
+                            variant="fullWidth"
+                            sx={{
+                                mt: '30px',
+                                mb: 2,
+                                overflow: 'auto',
+                                "& .MuiTabs-indicator": { display: "none" },
+                            }}
+                        >
+                            {weekDays.map((day, index) => (
+                                <Tab
+                                    key={index}
+                                    label={day}
+                                    sx={{
+                                        minWidth: 0,
+                                        textTransform: "none",
+                                        fontWeight: "600",
+                                        fontSize: "14px",
+                                        padding: "6px",
+                                        borderRadius: "8px",
+                                        backgroundColor: "#fff",
+                                        "&.Mui-selected": {
+                                            backgroundColor: "#81212D",
+                                            color: "#fff",
+                                        },
+                                        "&:not(.Mui-selected)": {
+                                            backgroundColor: "#fff",
+                                            color: "#000",
+                                        },
+                                        marginRight: day !== "Сб" ? "8px" : "0px",
+                                    }}
+                                />
+                            ))}
+                        </Tabs>
+
+                        {renderSchedule()}
+                    </>
+                    :
+                    <MessageSubgroup />
+                }
             </Container>
 
             <BottomNav active={1} />

@@ -28,7 +28,7 @@ const SplashScreen = () => {
                 component="p"
                 sx={{ textAlign: "center", fontWeight: "bold" }}
             >
-                Добрый день <br />{currentUser.name || "Гость"}!
+                Добрый день <br />{currentUser.fullName || "Гость"}!
             </Typography>
         </Container>
     );
