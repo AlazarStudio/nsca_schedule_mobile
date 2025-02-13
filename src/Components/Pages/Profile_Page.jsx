@@ -38,8 +38,8 @@ const Profile_Page = ({ currentUser }) => {
                     {formatDate()}
                 </Typography>
 
-                <Typography component="p" sx={{ fontSize: "24px", fontWeight: "700", margin: "15px 0 5px 0", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    {currentUser.name || "Гость"}
+                <Typography component="p" sx={{ fontSize: "18px", fontWeight: "700", margin: "15px 0 5px 0", display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    {currentUser.fullName || "Гость"}
                     <LogoutOutlinedIcon onClick={handleLogout} />
                 </Typography>
 

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, Container, Typography, Tab, Tabs, Chip, Card, CardContent } from "@mui/material";
 import BottomNav from "./BottomNavigation";
-import { schedule, getWeekNumber, formatDate } from "../../data";
+import { getWeekNumber, formatDate } from "../../data";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 
-const Schedule_Page = ({ currentUser }) => {
+const Schedule_Page = ({ currentUser, schedule }) => {
     const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
     const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
     const weekType = getWeekNumber();
@@ -194,7 +194,7 @@ const Schedule_Page = ({ currentUser }) => {
         >
             <Box>
                 {schedule.length > 0 ? (
-                    schedule.map((pair, index) => (
+                    schedule.filter(pair => pair && pair.pairNumber !== undefined).map((pair, index) => (
                         <Box
                             key={index}
                             sx={{
@@ -267,7 +267,6 @@ const Schedule_Page = ({ currentUser }) => {
                                         }} />
                                     </>
                                 }
-
 
                                 {isPairDone(currentTime, pair.pairNumber - 1, pairsTime) == 'notStart' &&
                                     <div style={{
@@ -435,8 +434,8 @@ const Schedule_Page = ({ currentUser }) => {
                     {formatDate()}
                 </Typography>
 
-                <Typography component="p" sx={{ fontSize: "24px", fontWeight: "700", margin: "15px 0 5px 0" }}>
-                    {currentUser.name || "Гость"}
+                <Typography component="p" sx={{ fontSize: "18px", fontWeight: "700", margin: "15px 0 5px 0" }}>
+                    {currentUser.fullName || "Гость"}
                 </Typography>
 
                 <Typography component="p" sx={{ fontSize: "13px", fontWeight: "500", display: "flex" }}>

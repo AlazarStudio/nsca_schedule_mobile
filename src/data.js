@@ -1,3 +1,40 @@
+import axios from "axios";
+
+let adress = 'http://192.168.31.174:5000'
+
+export const GET_fetchRequest = async (name, setRequest) => {
+    try {
+        const response = await axios.get(`${adress}/api/${name}`);
+        setRequest(response.data);
+    } catch (err) {
+        console.log(err.message);
+    }
+};
+
+export const POST_fetchRequest = async (addInfo, name) => {
+    try {
+        const response = await axios.post(
+            `${adress}/api/${name}`,
+            addInfo,
+        );
+        return response.data.user;
+    } catch (err) {
+        console.log(err.message);
+    }
+};
+
+export const PUT_fetchRequest = async (addInfo, name) => {
+    try {
+        const response = await axios.put(
+            `${adress}/api/${name}/${addInfo.id}`,
+            addInfo,
+        );
+        return response.data;
+    } catch (err) {
+        console.log(err.message);
+    }
+};
+
 export const formatDate = () => {
     const months = [
         "Января", "Февраля", "Марта", "Апреля", "Мая", "Июня",
@@ -26,270 +63,6 @@ export const getWeekNumber = (date = new Date()) => {
 
 // ----------------------------------------------------------------------------
 
-export const schedule = {
-    "ПМ-131": {
-        "monday": [{
-            "pairNumber": 1,
-            "type": "type1",
-            "fields": {
-                "main_subject": "Математика",
-                "main_teacher": "Джатдоев Алим Сеит-Алиевич",
-                "main_room": "211",
-                "main_type": "Лекционное занятие"
-            }
-        }],
-        "tuesday": [{
-            "pairNumber": 1,
-            "type": "type2",
-            "fields": {
-                "subgroup1_subject": "Математика",
-                "subgroup1_teacher": "Васильев Дмитрий Сергеевич",
-                "subgroup1_room": "247",
-                "subgroup1_type": "Лекционное занятие",
-                "subgroup2_subject": "Математика",
-                "subgroup2_teacher": "Алексеев Александр Александрович",
-                "subgroup2_room": "247",
-                "subgroup2_type": "Лекционное занятие"
-            }
-        },
-        {
-            "pairNumber": 2,
-            "type": "type3",
-            "fields": {
-                "numerator_subject": "Математика",
-                "numerator_teacher": "Васильев Дмитрий Сергеевич",
-                "numerator_room": "247",
-                "numerator_type": "Лекционное занятие",
-                "denominator_subject": "Математика",
-                "denominator_teacher": "Алексеев Александр Александрович",
-                "denominator_room": "247",
-                "denominator_type": "Практическое занятие"
-            }
-        },
-        {
-            "pairNumber": 3,
-            "type": "type4",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Информатика",
-                "subgroup1_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_denominator_room": "247",
-                "subgroup1_denominator_type": "Лабораторная работа",
-                "subgroup2_subject": "Математика",
-                "subgroup2_teacher": "Алексеев Александр Александрович",
-                "subgroup2_room": "216",
-                "subgroup2_type": "Практическое занятие"
-            }
-        },
-        {
-            "pairNumber": 4,
-            "type": "type4",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Информатика",
-                "subgroup1_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_denominator_room": "247",
-                "subgroup1_denominator_type": "Лабораторная работа",
-                "subgroup2_subject": "Математика",
-                "subgroup2_teacher": "Алексеев Александр Александрович",
-                "subgroup2_room": "216",
-                "subgroup2_type": "Практическое занятие"
-            }
-        },
-        {
-            "pairNumber": 5,
-            "type": "type4",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Информатика",
-                "subgroup1_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_denominator_room": "247",
-                "subgroup1_denominator_type": "Лабораторная работа",
-                "subgroup2_subject": "Математика",
-                "subgroup2_teacher": "Алексеев Александр Александрович",
-                "subgroup2_room": "216",
-                "subgroup2_type": "Практическое занятие"
-            }
-        },
-        {
-            "pairNumber": 6,
-            "type": "type4",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Информатика",
-                "subgroup1_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_denominator_room": "247",
-                "subgroup1_denominator_type": "Лабораторная работа",
-                "subgroup2_subject": "Математика",
-                "subgroup2_teacher": "Алексеев Александр Александрович",
-                "subgroup2_room": "216",
-                "subgroup2_type": "Практическое занятие"
-            }
-        },
-        {
-            "pairNumber": 7,
-            "type": "type4",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Информатика",
-                "subgroup1_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_denominator_room": "247",
-                "subgroup1_denominator_type": "Лабораторная работа",
-                "subgroup2_subject": "Математика",
-                "subgroup2_teacher": "Алексеев Александр Александрович",
-                "subgroup2_room": "216",
-                "subgroup2_type": "Практическое занятие"
-            }
-        },
-        {
-            "pairNumber": 8,
-            "type": "type4",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Информатика",
-                "subgroup1_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_denominator_room": "247",
-                "subgroup1_denominator_type": "Лабораторная работа",
-                "subgroup2_subject": "Математика",
-                "subgroup2_teacher": "Алексеев Александр Александрович",
-                "subgroup2_room": "216",
-                "subgroup2_type": "Практическое занятие"
-            }
-        }
-        ],
-        "wednesday": [{
-            "pairNumber": 1,
-            "type": "type4",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Информатика",
-                "subgroup1_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_denominator_room": "247",
-                "subgroup1_denominator_type": "Лабораторная работа",
-                "subgroup2_subject": "Математика",
-                "subgroup2_teacher": "Алексеев Александр Александрович",
-                "subgroup2_room": "216",
-                "subgroup2_type": "Практическое занятие"
-            }
-        }],
-        "thursday": [{
-            "pairNumber": 1,
-            "type": "type5",
-            "fields": {
-                "subgroup1_subject": "Математика",
-                "subgroup1_teacher": "Алексеев Александр Александрович",
-                "subgroup1_room": "247",
-                "subgroup1_type": "Лабораторная работа",
-                "subgroup2_numerator_subject": "Математика",
-                "subgroup2_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup2_numerator_room": "247",
-                "subgroup2_numerator_type": "Лекционное занятие",
-                "subgroup2_denominator_subject": "Математика",
-                "subgroup2_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup2_denominator_room": "247",
-                "subgroup2_denominator_type": "Практическое занятие"
-            }
-        }],
-        "friday": [{
-            "pairNumber": 1,
-            "type": "type6",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Морозов Владимир Петрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup2_numerator_subject": "Математика",
-                "subgroup2_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup2_numerator_room": "218",
-                "subgroup2_numerator_type": "Лекционное занятие",
-                "denominator_subject": "Математика",
-                "denominator_teacher": "Алексеев Александр Александрович",
-                "denominator_type": "Практическое занятие",
-                "denominator_room": "216"
-            }
-        },
-        {
-            "pairNumber": 2,
-            "type": "type7",
-            "fields": {
-                "numerator_subject": "Математика",
-                "numerator_teacher": "Алексеев Александр Александрович",
-                "numerator_room": "216",
-                "numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Математика",
-                "subgroup1_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup1_denominator_room": "247",
-                "subgroup1_denominator_type": "Практическое занятие",
-                "subgroup2_denominator_subject": "Математика",
-                "subgroup2_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup2_denominator_room": "247",
-                "subgroup2_denominator_type": "Лабораторная работа"
-            }
-        }
-        ],
-        "saturday": [{
-            "pairNumber": 1,
-            "type": "type8",
-            "fields": {
-                "subgroup1_numerator_subject": "Математика",
-                "subgroup1_numerator_teacher": "Морозов Владимир Петрович",
-                "subgroup1_numerator_room": "247",
-                "subgroup1_numerator_type": "Лекционное занятие",
-                "subgroup2_numerator_subject": "Информатика",
-                "subgroup2_numerator_teacher": "Алексеев Александр Александрович",
-                "subgroup2_numerator_room": "247",
-                "subgroup2_numerator_type": "Лекционное занятие",
-                "subgroup1_denominator_subject": "Математика",
-                "subgroup1_denominator_teacher": "Васильев Дмитрий Сергеевич",
-                "subgroup1_denominator_room": "216",
-                "subgroup1_denominator_type": "Лабораторная работа",
-                "subgroup2_denominator_subject": "Информатика",
-                "subgroup2_denominator_teacher": "Алексеев Александр Александрович",
-                "subgroup2_denominator_room": "216",
-                "subgroup2_denominator_type": "Лабораторная работа"
-            }
-        }],
-        "sunday": []
-    }
-}
+export const schedule = {}
 
-export const users = [{
-    id: 1,
-    username: "qwe",
-    password: "qwe",
-    name: "Джатдоев Алим",
-    group: "ПМ-131",
-    subgroup: '1',
-    role: "student",
-},
-{
-    id: 2,
-    username: "qwer",
-    password: "qwer",
-    name: "Чагарова Аминат",
-    group: "ПМ-131",
-    subgroup: '2',
-    role: "student",
-},
-];
+export const users = [];

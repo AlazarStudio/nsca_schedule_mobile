@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { users } from "../../data";
+// import { users } from "../../data";
 import {
     Box,
     Button,
@@ -14,9 +14,11 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { GET_fetchRequest, POST_fetchRequest } from "../../data";
 
 const Login = ({ currentUser }) => {
-    const [username, setUsername] = useState("");
+    const [user, setUser] = useState("");
+    const [login, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
@@ -27,35 +29,39 @@ const Login = ({ currentUser }) => {
         navigate("/main");
     }
 
-    const handleLogin = () => {
-        // Убираем фокус с активного элемента (снимаем клавиатуру)
-        const activeElement = document.activeElement;
-        if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
-            activeElement.blur();
-        }
-
-        // Проверяем пользователя
-        const user = users.find(
-            (u) => u.username === username && u.password === password
-        );
-
-        if (!user) {
-            setError("Неверный логин или пароль");
+    const handleLogin = async () => {
+        if (!login || !password) {
+            setError("Логин или пароль не введен");
             return;
         }
 
-        // Показать анимацию загрузки
+        // const activeElement = document.activeElement;
+        // if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+        //     activeElement.blur();
+        // }
+
         setLoading(true);
 
-        // Сохраняем пользователя в куки
-        Cookies.set("currentUser", JSON.stringify(user), { expires: 7 }); // Хранить 7 дней
+        try {
+            const response = await POST_fetchRequest({ login, password }, "auth/login");
 
-        // Задержка перед переходом
-        setTimeout(() => {
+            if (!response) {
+                throw new Error("Неверный логин или пароль");
+            }
+
+            setUser(response);
+            Cookies.set("currentUser", JSON.stringify(response), { expires: 7 });
+
+            setTimeout(() => {
+                setLoading(false);
+                navigate("/main");
+            }, 1000);
+        } catch (err) {
             setLoading(false);
-            navigate("/main");
-        }, 1000);
+            setError(err.message);
+        }
     };
+
 
     return (
         <Container
@@ -92,7 +98,7 @@ const Login = ({ currentUser }) => {
                         label="Логин"
                         variant="outlined"
                         fullWidth
-                        value={username}
+                        value={login}
                         onChange={(e) => setUsername(e.target.value)}
                         error={!!error}
                         margin="normal"

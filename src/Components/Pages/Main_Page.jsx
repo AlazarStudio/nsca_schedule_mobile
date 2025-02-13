@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, Container, Button } from "@mui/material";
 import BottomNav from "./BottomNavigation";
-import { formatDate, getWeekNumber, schedule } from "../../data"; // Подключаем расписание
+import { formatDate, GET_fetchRequest, getWeekNumber } from "../../data"; // Подключаем расписание
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 
-const Main_Page = ({ currentUser }) => {
+const Main_Page = ({ currentUser, schedule }) => {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes(); // Время в минутах
     const currentDay = now.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase(); // День недели
@@ -282,8 +282,8 @@ const Main_Page = ({ currentUser }) => {
                         <Typography component="p" sx={{ fontSize: "13px", fontWeight: '600' }}>
                             {formatDate()}
                         </Typography>
-                        <Typography component="p" sx={{ fontSize: "24px", fontWeight: "700", margin: "15px 0 5px 0" }}>
-                            {currentUser.name || "Гость"}
+                        <Typography component="p" sx={{ fontSize: "18px", fontWeight: "700", margin: "15px 0 5px 0" }}>
+                            {currentUser.fullName || "Гость"}
                         </Typography>
 
                         <Typography component="p" sx={{ fontSize: "13px", fontWeight: "500", display: "flex" }}>

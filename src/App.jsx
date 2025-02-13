@@ -9,6 +9,7 @@ import Schedule_Page from "./Components/Pages/Schedule_Page";
 import Profile_Page from "./Components/Pages/Profile_Page";
 import Non_Found_Page from "./Components/Pages/Non_Found_Page";
 import Layout from "./Components/Standart/Layout/Layout";
+import { GET_fetchRequest } from "./data";
 
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -16,6 +17,30 @@ function App() {
   const navigate = useNavigate();
   const user = Cookies.get("currentUser")
   const currentUser = user && JSON.parse(user);
+
+  const [groupSchedulesFetch, setGroupSchedulesFetch] = useState(null);
+  const [schedule, setSchedule] = useState(null);
+
+  useEffect(() => {
+    GET_fetchRequest('group-schedules', setGroupSchedulesFetch);
+  }, []);
+
+  const transformScheduleData = (data) => {
+    if (!Array.isArray(data)) return {};
+
+    return data.reduce((acc, entry) => {
+      const { group, ...schedule } = entry;
+      acc[group] = schedule;
+      return acc;
+    }, {});
+  };
+
+  useEffect(() => {
+    if (groupSchedulesFetch) { // Проверяем, что данные загружены
+      const formattedData = transformScheduleData(groupSchedulesFetch);
+      setSchedule(formattedData)
+    }
+  }, [groupSchedulesFetch]);
 
   useEffect(() => {
     if (currentUser) {
@@ -37,13 +62,14 @@ function App() {
     return <SplashScreen />;
   }
 
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={isAuthorized ? <Main_Page currentUser={currentUser} /> : <Login currentUser={currentUser} />} />
-        <Route path="/main" element={<Main_Page currentUser={currentUser} />} />
-        <Route path="/schedule" element={<Schedule_Page currentUser={currentUser} />} />
-        <Route path="/profile" element={<Profile_Page currentUser={currentUser} />} />
+        <Route path="/main" element={<Main_Page currentUser={currentUser} schedule={schedule}/>} />
+        <Route path="/schedule" element={<Schedule_Page currentUser={currentUser} schedule={schedule} />} />
+        <Route path="/profile" element={<Profile_Page currentUser={currentUser} schedule={schedule} />} />
         <Route path="/login" element={<Login currentUser={currentUser} />} />
         <Route path="*" element={<Non_Found_Page />} />
       </Route>
