@@ -92,24 +92,15 @@ const Profile_Page = ({ currentUser, setCurrentUser }) => {
                     mt: '30px',
                     gap: '30px'
                 }}>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '15px'
-                    }}>
-                        <Typography sx={{
-                            backgroundColor: '#fff',
-                            padding: '22px 20px',
-                            borderRadius: '10px',
+                    {currentUser.role == 'teacher' 
+                        ?
+                        'Перподаватель'
+                        :
+                        <Box sx={{
                             display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between'
+                            flexDirection: 'column',
+                            gap: '15px'
                         }}>
-                            <Box sx={{ fontSize: '17px', fontWeight: '600' }}>Группа:</Box>
-                            <Box sx={{ fontSize: '15px', fontWeight: '500' }}>{currentUser.group}</Box>
-                        </Typography>
-
-                        {currentUser.subgroup !== 'нет подгруппы' ? (
                             <Typography sx={{
                                 backgroundColor: '#fff',
                                 padding: '22px 20px',
@@ -118,39 +109,53 @@ const Profile_Page = ({ currentUser, setCurrentUser }) => {
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}>
-                                <Box sx={{ fontSize: '17px', fontWeight: '600' }}>Подгруппа:</Box>
-                                <Box sx={{ fontSize: '15px', fontWeight: '500' }}>{currentUser.subgroup}</Box>
+                                <Box sx={{ fontSize: '17px', fontWeight: '600' }}>Группа:</Box>
+                                <Box sx={{ fontSize: '15px', fontWeight: '500' }}>{currentUser.group}</Box>
                             </Typography>
-                        ) : (
-                            <Box sx={{
-                                backgroundColor: '#fff',
-                                padding: '20px',
-                                borderRadius: '10px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                alignItems: 'center'
-                            }}>
-                                <Select
-                                    value={selectedSubgroup}
-                                    onChange={(e) => setSelectedSubgroup(e.target.value)}
-                                    displayEmpty
-                                    sx={{ width: '100%' }}
-                                >
-                                    <MenuItem value="" disabled>Выберите подгруппу</MenuItem>
-                                    <MenuItem value="1">1</MenuItem>
-                                    <MenuItem value="2">2</MenuItem>
-                                </Select>
-                                <Button
-                                    variant="contained"
-                                    onClick={changeSubgroup}
-                                    disabled={!selectedSubgroup}
-                                >
-                                    Изменить
-                                </Button>
-                            </Box>
-                        )}
-                    </Box>
+
+                            {currentUser.subgroup !== 'нет подгруппы' ? (
+                                <Typography sx={{
+                                    backgroundColor: '#fff',
+                                    padding: '22px 20px',
+                                    borderRadius: '10px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <Box sx={{ fontSize: '17px', fontWeight: '600' }}>Подгруппа:</Box>
+                                    <Box sx={{ fontSize: '15px', fontWeight: '500' }}>{currentUser.subgroup}</Box>
+                                </Typography>
+                            ) : (
+                                <Box sx={{
+                                    backgroundColor: '#fff',
+                                    padding: '20px',
+                                    borderRadius: '10px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '10px',
+                                    alignItems: 'center'
+                                }}>
+                                    <Select
+                                        value={selectedSubgroup}
+                                        onChange={(e) => setSelectedSubgroup(e.target.value)}
+                                        displayEmpty
+                                        sx={{ width: '100%' }}
+                                    >
+                                        <MenuItem value="" disabled>Выберите подгруппу</MenuItem>
+                                        <MenuItem value="1">1</MenuItem>
+                                        <MenuItem value="2">2</MenuItem>
+                                    </Select>
+                                    <Button
+                                        variant="contained"
+                                        onClick={changeSubgroup}
+                                        disabled={!selectedSubgroup}
+                                    >
+                                        Изменить
+                                    </Button>
+                                </Box>
+                            )}
+                        </Box>
+                    }
                 </Box>
             </Container>
 

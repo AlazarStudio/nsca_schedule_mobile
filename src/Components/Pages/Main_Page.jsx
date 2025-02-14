@@ -295,7 +295,7 @@ const Main_Page = ({ currentUser, schedule }) => {
                     </Box>
                 </Container>
 
-                {currentUser.subgroup && currentUser.subgroup != 'нет подгруппы' ?
+                {currentUser.role == 'teacher' || (currentUser.role == 'student' && currentUser.subgroup && currentUser.subgroup != 'нет подгруппы') ?
                     <Container
                         sx={{
                             p: 0,
@@ -395,93 +395,97 @@ const Main_Page = ({ currentUser, schedule }) => {
                                 </>
                         }
 
-                        <Typography variant="p" fontWeight="bold" sx={{ fontSize: "20px" }}>
-                            Следующая пара
-                        </Typography>
-                        {nextPair != 'Нет занятия' ? (
-                            <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '10px' }}>
-                                <CardContent
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '25px',
-                                        p: '16px !important',
-                                    }}
-                                >
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                        <Typography sx={{ fontSize: '17px', fontWeight: '700' }}>
-                                            {nextPair.subject}
-                                        </Typography>
-                                        <Typography
+                        {nextPair != 'Нет занятия' &&
+                            <>
+                                <Typography variant="p" fontWeight="bold" sx={{ fontSize: "20px" }}>
+                                    Следующая пара
+                                </Typography>
+                                {nextPair != 'Нет занятия' ? (
+                                    <Card sx={{ boxShadow: 'none', borderRadius: '10px', flexShrink: 0, mb: '10px' }}>
+                                        <CardContent
                                             sx={{
-                                                fontSize: '13px',
-                                                fontWeight: '600',
-                                                color: '#00000060',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '25px',
+                                                p: '16px !important',
                                             }}
                                         >
-                                            {nextPair.type}
-                                        </Typography>
-                                    </Box>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                <Typography sx={{ fontSize: '17px', fontWeight: '700' }}>
+                                                    {nextPair.subject}
+                                                </Typography>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: '13px',
+                                                        fontWeight: '600',
+                                                        color: '#00000060',
+                                                    }}
+                                                >
+                                                    {nextPair.type}
+                                                </Typography>
+                                            </Box>
 
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                        <Typography
-                                            sx={{
-                                                fontSize: '13px',
-                                                color: '#000000',
-                                                fontWeight: '500',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '5px',
-                                            }}
-                                        >
-                                            <LocalLibraryOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                            {nextPair.pairNumber} пара
-                                        </Typography>
-                                        <Typography
-                                            sx={{
-                                                fontSize: '13px',
-                                                color: '#000000',
-                                                fontWeight: '500',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '5px',
-                                            }}
-                                        >
-                                            <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                            {pairsNumberShow[currentInterval.pairNumber]?.time}
-                                        </Typography>
-                                        <Typography
-                                            sx={{
-                                                fontSize: '13px',
-                                                color: '#000000',
-                                                fontWeight: '500',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '5px',
-                                            }}
-                                        >
-                                            <PersonOutlineOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                            {nextPair.teacher}
-                                        </Typography>
-                                        <Typography
-                                            sx={{
-                                                fontSize: '13px',
-                                                color: '#000000',
-                                                fontWeight: '500',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '5px',
-                                            }}
-                                        >
-                                            <ErrorOutlineIcon style={{ color: '#81212D', fontSize: 14 }} />
-                                            {nextPair.room?.[0]} корпус, {nextPair.room} аудитория
-                                        </Typography>
-                                    </Box>
-                                </CardContent>
-                            </Card>
-                        ) : (
-                            <Typography>Нет следующей пары</Typography>
-                        )}
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: '13px',
+                                                        color: '#000000',
+                                                        fontWeight: '500',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '5px',
+                                                    }}
+                                                >
+                                                    <LocalLibraryOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
+                                                    {nextPair.pairNumber} пара
+                                                </Typography>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: '13px',
+                                                        color: '#000000',
+                                                        fontWeight: '500',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '5px',
+                                                    }}
+                                                >
+                                                    <AccessTimeIcon style={{ color: '#81212D', fontSize: 14 }} />
+                                                    {pairsNumberShow[currentInterval.pairNumber]?.time}
+                                                </Typography>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: '13px',
+                                                        color: '#000000',
+                                                        fontWeight: '500',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '5px',
+                                                    }}
+                                                >
+                                                    <PersonOutlineOutlinedIcon style={{ color: '#81212D', fontSize: 14 }} />
+                                                    {nextPair.teacher}
+                                                </Typography>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: '13px',
+                                                        color: '#000000',
+                                                        fontWeight: '500',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '5px',
+                                                    }}
+                                                >
+                                                    <ErrorOutlineIcon style={{ color: '#81212D', fontSize: 14 }} />
+                                                    {nextPair.room?.[0]} корпус, {nextPair.room} аудитория
+                                                </Typography>
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
+                                ) : (
+                                    <Typography>Нет следующей пары</Typography>
+                                )}
+                            </>
+                        }
                     </Container>
                     :
                     <MessageSubgroup />
