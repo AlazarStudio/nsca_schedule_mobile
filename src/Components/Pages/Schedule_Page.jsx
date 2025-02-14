@@ -17,6 +17,7 @@ const Schedule_Page = ({ currentUser, schedule }) => {
                 if (!Array.isArray(lessons)) return;
 
                 let hasLessons = false;
+                let uniqueLessons = new Set();
 
                 lessons.forEach(lesson => {
                     Object.entries(lesson.fields).forEach(([key, value]) => {
@@ -45,8 +46,12 @@ const Schedule_Page = ({ currentUser, schedule }) => {
                                     group: groupName
                                 };
 
-                                teacherSchedule[teacherName][day].push(lessonData);
-                                hasLessons = true;
+                                let lessonKey = `${day}-${lessonData.pairNumber}-${lessonData.type}-${lessonData.group}`;
+                                if (!uniqueLessons.has(lessonKey)) {
+                                    uniqueLessons.add(lessonKey);
+                                    teacherSchedule[teacherName][day].push(lessonData);
+                                    hasLessons = true;
+                                }
                             }
                         }
                     });
