@@ -9,11 +9,67 @@ import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
 import MessageSubgroup from "./MessageSubgroup";
 
 const Schedule_Page = ({ currentUser, schedule }) => {
+    function transformScheduleForTeachers(schedule, weekType) {
+        let teacherSchedule = {};
+
+        Object.entries(schedule).forEach(([groupName, group]) => {
+            Object.entries(group).forEach(([day, lessons]) => {
+                if (!Array.isArray(lessons)) return;
+
+                let hasLessons = false;
+
+                lessons.forEach(lesson => {
+                    Object.entries(lesson.fields).forEach(([key, value]) => {
+                        if (key.includes('_teacher') && value) {
+                            let teacherName = value;
+                            let baseKey = key.replace('_teacher', '');
+
+                            if (!teacherSchedule[teacherName]) {
+                                teacherSchedule[teacherName] = {};
+                            }
+
+                            if (!teacherSchedule[teacherName][day]) {
+                                teacherSchedule[teacherName][day] = [];
+                            }
+
+                            let lessonWeekType = baseKey.includes('numerator') ? 'numerator' :
+                                baseKey.includes('denominator') ? 'denominator' : 'all';
+
+                            if (weekType === 'all' || lessonWeekType === 'all' || weekType === lessonWeekType) {
+                                let lessonData = {
+                                    pairNumber: lesson.pairNumber,
+                                    subject: lesson.fields[baseKey + '_subject'],
+                                    room: lesson.fields[baseKey + '_room'],
+                                    type: lesson.fields[baseKey + '_type'],
+                                    weekType: lessonWeekType,
+                                    group: groupName
+                                };
+
+                                teacherSchedule[teacherName][day].push(lessonData);
+                                hasLessons = true;
+                            }
+                        }
+                    });
+                });
+
+                Object.keys(teacherSchedule).forEach(teacher => {
+                    if (!teacherSchedule[teacher][day]) {
+                        teacherSchedule[teacher][day] = [];
+                    }
+                });
+            });
+        });
+
+        return teacherSchedule;
+    }
+
     const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
     const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
     const weekType = getWeekNumber();
     const currentDay = (new Date().getDay() + 6) % 7;
     const [selectedDay, setSelectedDay] = useState(currentDay);
+
+    const teacherSchedule = transformScheduleForTeachers(schedule, weekType);
 
     const handleChange = (event, newValue) => {
         setSelectedDay(newValue);
@@ -180,6 +236,22 @@ const Schedule_Page = ({ currentUser, schedule }) => {
                     default:
                         return null;
                 }
+            })
+            .filter((pair) => pair !== null); // Убираем пустые значения
+    };
+
+    const getScheduleForDayTeacher = (daySchedule) => {
+        if (!daySchedule || daySchedule.length === 0) return [];
+
+        return daySchedule
+            .map((pair) => {
+                return {
+                    pairNumber: pair.pairNumber,
+                    subject: pair.subject,
+                    room: pair.room,
+                    type: pair.type,
+                    teacher: pair.group,
+                };
             })
             .filter((pair) => pair !== null); // Убираем пустые значения
     };
@@ -405,9 +477,14 @@ const Schedule_Page = ({ currentUser, schedule }) => {
 
     const renderSchedule = () => {
         const dayKey = days[selectedDay]; // Используем `days` для получения ключа расписания
-        const daySchedule = schedule[currentUser.group]?.[dayKey]; // Получаем расписание для выбранного дня
+        const daySchedule = currentUser.role == 'user' ? schedule[currentUser.group]?.[dayKey] : currentUser.role == 'teacher' && teacherSchedule[currentUser.fullName]?.[dayKey]; // Получаем расписание для выбранного дня
+
         const userSchedule = getScheduleForDay(daySchedule, currentUser.subgroup, weekType);
-        return renderDaySchedule(weekDays[selectedDay], userSchedule); // Передаём русский день и расписание
+        const teacherScheduleData = getScheduleForDayTeacher(daySchedule);
+
+        let scheduleData = currentUser.role == 'user' ? userSchedule : currentUser.role == 'teacher' && teacherScheduleData;
+
+        return renderDaySchedule(weekDays[selectedDay], scheduleData); // Передаём русский день и расписание
     };
 
     return (
@@ -443,7 +520,6 @@ const Schedule_Page = ({ currentUser, schedule }) => {
                     Текущая неделя:{" "}
                     <div style={{ color: "#81212D", fontWeight: "600", paddingLeft: "5px" }}>{weekType == 'numerator' ? "Числитель" : "Знаменатель"}</div>
                 </Typography>
-
 
 
                 {currentUser.role == 'teacher' || (currentUser.role == 'student' && currentUser.subgroup && currentUser.subgroup != 'нет подгруппы') ?
