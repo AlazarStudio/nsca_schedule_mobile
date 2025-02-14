@@ -213,6 +213,97 @@ const Main_Page = ({ currentUser, schedule }) => {
         }
     }
 
+    function transformScheduleForTeachers(schedule, weekType) {
+        let teacherSchedule = {};
+
+        Object.entries(schedule).forEach(([groupName, group]) => {
+            Object.entries(group).forEach(([day, lessons]) => {
+                if (!Array.isArray(lessons)) return;
+
+                let hasLessons = false;
+
+                lessons.forEach(lesson => {
+                    Object.entries(lesson.fields).forEach(([key, value]) => {
+                        if (key.includes('_teacher') && value) {
+                            let teacherName = value;
+                            let baseKey = key.replace('_teacher', '');
+
+                            if (!teacherSchedule[teacherName]) {
+                                teacherSchedule[teacherName] = {};
+                            }
+
+                            if (!teacherSchedule[teacherName][day]) {
+                                teacherSchedule[teacherName][day] = [];
+                            }
+
+                            let lessonWeekType = baseKey.includes('numerator') ? 'numerator' :
+                                baseKey.includes('denominator') ? 'denominator' : 'all';
+
+                            if (weekType === 'all' || lessonWeekType === 'all' || weekType === lessonWeekType) {
+                                let lessonData = {
+                                    pairNumber: lesson.pairNumber,
+                                    subject: lesson.fields[baseKey + '_subject'],
+                                    room: lesson.fields[baseKey + '_room'],
+                                    type: lesson.fields[baseKey + '_type'],
+                                    weekType: lessonWeekType,
+                                    group: groupName
+                                };
+
+                                teacherSchedule[teacherName][day].push(lessonData);
+                                hasLessons = true;
+                            }
+                        }
+                    });
+                });
+
+                Object.keys(teacherSchedule).forEach(teacher => {
+                    if (!teacherSchedule[teacher][day]) {
+                        teacherSchedule[teacher][day] = [];
+                    }
+                });
+            });
+        });
+
+        return teacherSchedule;
+    }
+
+    function getTeacherSchedule(users, schedule, currentDay, currentWeek, pairNumber) {
+        try {
+            // Найти текущего пользователя
+            const user = users;
+
+            if (!user) {
+                throw new Error("Пользователь не найден");
+            }
+
+            const teacherSchedule = transformScheduleForTeachers(schedule, weekType)[currentUser.fullName];
+
+            // Найти расписание для указанной пары
+            const pairSchedule = teacherSchedule[currentDay].find(
+                (pair) => pair.pairNumber === pairNumber
+            );
+
+            if (!pairSchedule) {
+                throw new Error("Пара не найдена");
+            }
+
+            // Извлечь информацию в зависимости от типа пары
+            let result = {
+                pairNumber: pairSchedule.pairNumber,
+                subject: pairSchedule.subject,
+                teacher: pairSchedule.group,
+                room: pairSchedule.room,
+                type: pairSchedule.type
+            };
+
+            return result || "Нет занятия";
+        } catch {
+            return "Нет занятия";
+        }
+    }
+
+    // const teacherSchedule = transformScheduleForTeachers(schedule, weekType);
+
     const findNextPairNumber = (groupSchedule, currentPairNumber) => {
         if (!groupSchedule || groupSchedule.length === 0) return null;
 
@@ -233,26 +324,55 @@ const Main_Page = ({ currentUser, schedule }) => {
 
     if (currentInterval?.type === "lesson") {
         // Если сейчас идёт пара
-        currentPair = getUserSchedule(currentUser, schedule, currentDay, weekType, currentInterval.pairNumber);
+        currentPair =
+            currentUser.role == 'student'
+                ?
+                getUserSchedule(currentUser, schedule, currentDay, weekType, currentInterval.pairNumber)
+                :
+                getTeacherSchedule(currentUser, schedule, currentDay, weekType, currentInterval.pairNumber);
 
         // Определяем следующую пару
-        const groupSchedule = schedule[currentUser.group]?.[currentDay];
+        const groupSchedule = currentUser.role == 'student' ? schedule[currentUser.group]?.[currentDay] : transformScheduleForTeachers(schedule, weekType)[currentUser.fullName]?.[currentDay];
         const nextPairNumber = findNextPairNumber(groupSchedule, currentInterval.pairNumber);
-        nextPair = nextPairNumber ? getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber) : "Нет занятия";
+
+        nextPair = nextPairNumber
+            ?
+            currentUser.role == 'student'
+                ?
+                getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber)
+                :
+                getTeacherSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber)
+            :
+            "Нет занятия";
     } else if (currentInterval?.type === "break") {
         // Если сейчас перемена
-        const groupSchedule = schedule[currentUser.group]?.[currentDay];
+        const groupSchedule = currentUser.role == 'student' ? schedule[currentUser.group]?.[currentDay] : transformScheduleForTeachers(schedule, weekType)[currentUser.fullName]?.[currentDay];
         const nextPairNumber = findNextPairNumber(groupSchedule, currentInterval.pairNumber);
-        console.log(currentInterval.pairNumber)
 
         currentPair = "Перемена";
-        nextPair = nextPairNumber ? getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber) : "Нет занятия";
+        nextPair = nextPairNumber
+            ?
+            currentUser.role == 'student'
+                ?
+                getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber)
+                :
+                getTeacherSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber)
+            :
+            "Нет занятия";
     } else {
         // Если нет текущего интервала
         currentPair = "Нет занятия";
-        const groupSchedule = schedule[currentUser.group]?.[currentDay];
+        const groupSchedule = currentUser.role == 'student' ? schedule[currentUser.group]?.[currentDay] : transformScheduleForTeachers(schedule, weekType)[currentUser.fullName]?.[currentDay];
         const nextPairNumber = findNextPairNumber(groupSchedule, 0); // Искать с первой пары
-        nextPair = nextPairNumber ? getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber) : "Нет занятия";
+        nextPair = nextPairNumber
+            ?
+            currentUser.role == 'student'
+                ?
+                getUserSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber)
+                :
+                getTeacherSchedule(currentUser, schedule, currentDay, weekType, nextPairNumber)
+            :
+            "Нет занятия";
     }
 
     return (
