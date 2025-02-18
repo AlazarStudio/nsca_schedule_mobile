@@ -1,6 +1,7 @@
 import axios from "axios";
 
-let adress = 'http://192.168.31.174:5000'
+// let adress = 'http://192.168.31.174:5000'
+let adress = 'http://62.217.177.31:5000'
 
 export const GET_fetchRequest = async (name, setRequest) => {
     try {

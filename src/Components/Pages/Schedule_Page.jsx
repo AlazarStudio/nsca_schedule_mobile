@@ -482,12 +482,19 @@ const Schedule_Page = ({ currentUser, schedule }) => {
 
     const renderSchedule = () => {
         const dayKey = days[selectedDay]; // Используем `days` для получения ключа расписания
-        const daySchedule = currentUser.role == 'user' ? schedule[currentUser.group]?.[dayKey] : currentUser.role == 'teacher' && teacherSchedule[currentUser.fullName]?.[dayKey]; // Получаем расписание для выбранного дня
+        const daySchedule = currentUser.role == 'student'
+            ?
+            schedule[currentUser.group]?.[dayKey]
+            :
+            currentUser.role == 'teacher'
+            &&
+            teacherSchedule[currentUser.fullName]?.[dayKey]; // Получаем расписание для выбранного дня
 
+        console.log(currentUser.role)
         const userSchedule = getScheduleForDay(daySchedule, currentUser.subgroup, weekType);
         const teacherScheduleData = getScheduleForDayTeacher(daySchedule);
 
-        let scheduleData = currentUser.role == 'user' ? userSchedule : currentUser.role == 'teacher' && teacherScheduleData;
+        let scheduleData = currentUser.role == 'student' ? userSchedule : currentUser.role == 'teacher' && teacherScheduleData;
 
         return renderDaySchedule(weekDays[selectedDay], scheduleData); // Передаём русский день и расписание
     };
