@@ -53,7 +53,7 @@ const buttonStyle = {
   width: '40px',
   height: '40px',
   borderRadius: '50px',
-  backgroundColor: '#4CAF50',
+  backgroundColor: '#81212D',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
