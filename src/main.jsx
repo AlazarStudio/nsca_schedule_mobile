@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material/styles"; // Импорт ThemeProvi
 import App from "./App.jsx";
 import theme from "./theme"; // Импорт темы
 import "./index.css";
+import * as serviceWorkerRegistration from '../serviceWorkerRegistration';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -15,3 +16,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </ThemeProvider>
   </React.StrictMode>
 );
+
+serviceWorkerRegistration.register();

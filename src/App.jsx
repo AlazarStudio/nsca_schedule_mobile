@@ -9,6 +9,7 @@ import Schedule_Page from "./Components/Pages/Schedule_Page";
 import Profile_Page from "./Components/Pages/Profile_Page";
 import Non_Found_Page from "./Components/Pages/Non_Found_Page";
 import Layout from "./Components/Standart/Layout/Layout";
+import InstallButton from "./Components/Pages/InstallButton/InstallButton";
 import { GET_fetchRequest } from "./data";
 
 function App() {
@@ -64,16 +65,21 @@ function App() {
 
 
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={isAuthorized ? <Main_Page currentUser={currentUser} /> : <Login currentUser={currentUser} />} />
-        <Route path="/main" element={<Main_Page currentUser={currentUser} schedule={schedule}/>} />
-        <Route path="/schedule" element={<Schedule_Page currentUser={currentUser} schedule={schedule} />} />
-        <Route path="/profile" element={<Profile_Page currentUser={currentUser} schedule={schedule} />} />
-        <Route path="/login" element={<Login currentUser={currentUser} />} />
-        <Route path="*" element={<Non_Found_Page />} />
-      </Route>
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={isAuthorized ? <Main_Page currentUser={currentUser} /> : <Login currentUser={currentUser} />} />
+          <Route path="/main" element={<Main_Page currentUser={currentUser} schedule={schedule} />} />
+          <Route path="/schedule" element={<Schedule_Page currentUser={currentUser} schedule={schedule} />} />
+          <Route path="/profile" element={<Profile_Page currentUser={currentUser} schedule={schedule} />} />
+          <Route path="/login" element={<Login currentUser={currentUser} />} />
+          <Route path="*" element={<Non_Found_Page />} />
+        </Route>
+      </Routes>
+
+      {/* Кнопка установки */}
+      <InstallButton />
+    </>
   );
 }
 
