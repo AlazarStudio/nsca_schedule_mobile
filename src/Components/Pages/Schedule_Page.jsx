@@ -61,6 +61,7 @@ const Schedule_Page = ({ currentUser, schedule }) => {
                     if (!teacherSchedule[teacher][day]) {
                         teacherSchedule[teacher][day] = [];
                     }
+                    teacherSchedule[teacher][day].sort((a, b) => a.pairNumber - b.pairNumber);
                 });
             });
         });
@@ -443,21 +444,23 @@ const Schedule_Page = ({ currentUser, schedule }) => {
                                                 />
                                                 {pair.teacher}
                                             </Typography>
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '13px',
-                                                    color: '#000000',
-                                                    fontWeight: '500',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '5px',
-                                                }}
-                                            >
-                                                <ErrorOutlineIcon
-                                                    style={{ color: '#81212D', fontSize: 14 }}
-                                                />
-                                                {pair.room[0]} корпус, {pair.room} аудитория
-                                            </Typography>
+                                            {pair.room &&
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: '13px',
+                                                        color: '#000000',
+                                                        fontWeight: '500',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '5px',
+                                                    }}
+                                                >
+                                                    <ErrorOutlineIcon
+                                                        style={{ color: '#81212D', fontSize: 14 }}
+                                                    />
+                                                    {pair?.room[0]} корпус, {pair.room} аудитория
+                                                </Typography>
+                                            }
                                         </Box>
                                     </Box>
                                 </CardContent>
@@ -490,7 +493,7 @@ const Schedule_Page = ({ currentUser, schedule }) => {
             &&
             teacherSchedule[currentUser.fullName]?.[dayKey]; // Получаем расписание для выбранного дня
 
-        console.log(currentUser.role)
+        // console.log(currentUser.role)
         const userSchedule = getScheduleForDay(daySchedule, currentUser.subgroup, weekType);
         const teacherScheduleData = getScheduleForDayTeacher(daySchedule);
 

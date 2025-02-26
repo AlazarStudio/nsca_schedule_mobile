@@ -1,7 +1,8 @@
 import axios from "axios";
 
-// let adress = 'http://192.168.31.174:5000'
-let adress = 'http://62.217.177.31:5000'
+let adress = 'http://192.168.1.173:5000'
+// let adress = 'http://62.217.177.31:5000'
+// let adress = 'https://www.backend.ncsa-lk.ru'
 
 export const GET_fetchRequest = async (name, setRequest) => {
     try {
@@ -59,7 +60,7 @@ export const getWeekNumber = (date = new Date()) => {
     const startOfYear = new Date(date.getFullYear(), 0, 1);
     const diffInDays = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24));
     const weekNumber = Math.ceil((diffInDays + startOfYear.getDay() + 1) / 7);
-    return weekNumber % 2 === 0 ? 'denominator' : 'numerator';
+    return weekNumber % 2 === 0 ? 'numerator' : 'denominator';
 }
 
 // ----------------------------------------------------------------------------
